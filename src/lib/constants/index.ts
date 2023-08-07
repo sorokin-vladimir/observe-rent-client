@@ -1,0 +1,1 @@
+export const HOUSING_NAME_MAX_LENGTH = 90;

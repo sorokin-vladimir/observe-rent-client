@@ -6,9 +6,11 @@
   import { page } from '$app/stores';
 	import { isValidPath } from '$lib/utils';
   import { getDB, db } from '$lib/db';
-	import { updateHousings } from '$lib/stores';
+	import { updateHousings, user } from '$lib/stores';
+	import { Spinner } from 'yesvelte';
 
   let isAuth = true;
+  let isLoading = true;
 
   async function redirect() {
     let querySub: Subscription | undefined;
@@ -21,8 +23,17 @@
         updateHousings(results.map((result) => result.toJSON()))
       })
       /** Set the DB in a store to easy access */
-      db.set(_db);
+      if (!_db) throw new Error('DB is not defined');
+      db.set({ _: _db })
 
+      /** Set user mock */
+      user.set({
+        id: 'YKYo1qj9pHaJAnKgRumAk70n',
+        name: 'John Doe',
+        pwd: 'myPassword',
+      })
+
+      isLoading = false;
       const { pathname } = $page.url;
       if (isValidPath(pathname)) {
         await goto(pathname);
@@ -33,9 +44,14 @@
       /** Unsubscribe from updates */
       querySub?.unsubscribe()
       /** Destroy the DB */
-      await $db?.destroy();
+      await $db?._.destroy();
       /** Remove the DB from a store */
-      db.set(null);
+      db.set({});
+
+      /** Remove user mock */
+      user.set({});
+
+      isLoading = false;
       await goto('/login');
     }
   }
@@ -53,7 +69,13 @@
 </svelte:head>
 
 <div class="app-wrapper">
-  <slot />
+  {#if isLoading}
+    <div class="spinner-wrapper">
+      <Spinner size="lg" color="primary" />
+    </div>
+  {:else}
+    <slot />
+  {/if}
   <button class="button" on:click={() => {
     // TODO: remove button and wrapper
     isAuth = !isAuth;
@@ -71,6 +93,13 @@
       position: fixed;
       bottom: 0;
       right: 0;
+    }
+    .spinner-wrapper {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 </style>

@@ -1,14 +1,15 @@
 import { dev, browser } from "$app/environment";
-import { writable } from 'svelte/store';
 
-import type { HousingCollection } from "$lib/types";
+import { wrappedValidateZSchemaStorage } from 'rxdb/plugins/validate-z-schema';
 import { addRxPlugin, createRxDatabase, type RxDatabase } from "rxdb";
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
 import { wrappedKeyCompressionStorage } from 'rxdb/plugins/key-compression';
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { RxDBLeaderElectionPlugin } from 'rxdb/plugins/leader-election';
 
+import type { HousingCollection } from "$lib/types";
 import { housingSchemaLiteral } from "./schema_housing";
+import { deepMap } from "nanostores";
 
 export type DatabaseCollections = {
   housings: HousingCollection;
@@ -35,9 +36,13 @@ async function createDB(dbName: string, password: string) {
     storage: getRxStorageDexie(),
   });
 
+  const storageWithValidatorAndKeyCompression = wrappedValidateZSchemaStorage({
+    storage: storageWithKeyCompression,
+  })
+
   return createRxDatabase<DatabaseCollections>({
     name: dbName,
-    storage: dev ? getRxStorageDexie() : storageWithKeyCompression,
+    storage: storageWithValidatorAndKeyCompression,
     ignoreDuplicate: false,
     password,
     multiInstance: true
@@ -61,4 +66,4 @@ async function setLeadership(db: Database) {
   });
 }
 
-export const db = writable<Database | null>(null);
+export const db = deepMap<{ _: Database } | Record<string, never>>({});

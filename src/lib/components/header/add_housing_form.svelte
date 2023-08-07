@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { HOUSING_NAME_MAX_LENGTH } from "$lib/constants";
 	import { createEventDispatcher, onDestroy } from "svelte";
 	import { Button, Input, Label } from "yesvelte";
 
@@ -21,7 +22,7 @@
 <form>
   <div class="input-block">
     <Label for="name">Name</Label>
-    <Input type="text" placeholder="Name" bind:value={housingName} />
+    <Input maxlength={HOUSING_NAME_MAX_LENGTH} type="text" placeholder="Name" bind:value={housingName} />
   </div>
   <div class="button-wrapper">
     <Button color="primary" type="submit" on:click={addHousing}>Add</Button>
