@@ -1,14 +1,28 @@
 <script lang="ts">
   import tabler from 'yesvelte/css/tabler.min.css?url'
   import { onMount } from 'svelte';
+  import type { Subscription } from 'rxjs';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
 	import { isValidPath } from '$lib/utils';
+  import { getDB, db } from '$lib/db';
+	import { updateHousings } from '$lib/stores';
 
   let isAuth = true;
 
   async function redirect() {
+    let querySub: Subscription | undefined;
     if (isAuth) {
+      /** Create (or get) DB */
+      const _db = await getDB('test_name', 'myPassword');
+      /** Subscribe to updates */
+      const query = _db?.housings.find();
+      querySub = query?.$.subscribe((results) => {
+        updateHousings(results.map((result) => result.toJSON()))
+      })
+      /** Set the DB in a store to easy access */
+      db.set(_db);
+
       const { pathname } = $page.url;
       if (isValidPath(pathname)) {
         await goto(pathname);
@@ -16,6 +30,12 @@
       }
       await goto('/');
     } else {
+      /** Unsubscribe from updates */
+      querySub?.unsubscribe()
+      /** Destroy the DB */
+      await $db?.destroy();
+      /** Remove the DB from a store */
+      db.set(null);
       await goto('/login');
     }
   }

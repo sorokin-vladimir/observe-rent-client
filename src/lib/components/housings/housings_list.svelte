@@ -1,29 +1,14 @@
 <script lang="ts">
-	import type { Housing } from '$lib/types';
-  import HousingCard from '../housing/housing_card.svelte';
-
-  const housings: Housing[] = [{
-    id: '1-abc',
-    name: 'Housing 1',
-    area: 56,
-    livingArea: 45,
-  }, {
-    id: '2-abc',
-    name: 'Housing 2',
-    area: 73,
-    livingArea: 67,
-  }, {
-    id: '3-abc',
-    name: 'Housing 3',
-    area: 45,
-    livingArea: 34,
-  }]
+  import HousingCard from '../housing_card/housing_card.svelte';
+  import { housings } from '$lib/stores';
 </script>
 
-
 <div class="list-wrapper">
-  {#each housings as housing}
-    <HousingCard {...housing} />
+  {#if $housings.data.length === 0}
+    <p>No housings</p>
+  {/if}
+  {#each $housings.data as housing}
+    <HousingCard id={housing.id} name={housing.name} area={housing.area} livingArea={housing.livingArea} />
   {/each}
 </div>
 

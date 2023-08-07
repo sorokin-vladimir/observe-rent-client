@@ -35,7 +35,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"nanoid": "^4.0.2",
 		"nanostores": "^0.9.3",
+		"rxdb": "^14.15.1",
 		"yesvelte": "^0.0.2-next.205"
 	}
 }
