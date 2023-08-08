@@ -28,7 +28,7 @@
     align-items: center;
     gap: 2rem;
     width: 100%;
-    padding: 1rem;
+    padding: 1rem 2rem;
     margin-bottom: 2rem;
     position: sticky;
     top: 0;
@@ -38,6 +38,7 @@
       content: '';
       position: absolute;
       bottom: 0;
+      left: 1rem;
       width: calc(100% - 2rem);
       height: 1px;
       background-color: #e6e6e6;

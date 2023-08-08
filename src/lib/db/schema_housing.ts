@@ -30,6 +30,9 @@ export const housingSchemaLiteral = {
             minimum: 0,
             maximum: 10000,
         },
+        address: {
+            type: 'string',
+        },
         createdAt: {
             type: 'number',
             minimum: 0,

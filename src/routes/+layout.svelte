@@ -91,8 +91,8 @@
   }
 
   .app {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;

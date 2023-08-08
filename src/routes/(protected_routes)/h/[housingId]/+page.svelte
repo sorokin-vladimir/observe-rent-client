@@ -6,6 +6,7 @@
 	import { getLocalTimeFromUTCTimestamp } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { Button } from 'yesvelte';
+  import { HousingDataFields } from '$lib/components';
 
   onMount(async () => {
     const h = await getHousingById($page.params.housingId);
@@ -18,12 +19,11 @@
       await goto('/');
     }
   }
+
 </script>
 
-<div>
-  <p>
-    housing page. id: {$page.params.housingId}
-  </p>
+<div class="wrapper">
+  <HousingDataFields />
   <p>
     housing page. id: {$currentHousing.id}
   </p>
@@ -36,80 +36,12 @@
   <p>
     created by: {$currentHousing.createdBy}
   </p>
-  <p>
-    housing page. id: {$page.params.housingId}
-  </p>
-  <p>
-    housing page. id: {$currentHousing.id}
-  </p>
-  <p>
-    name: {$currentHousing.name}
-  </p>
-  <p>
-    createdAt: {getLocalTimeFromUTCTimestamp($currentHousing.createdAt).toLocaleString()}
-  </p>
-  <p>
-    created by: {$currentHousing.createdBy}
-  </p>
-  <p>
-    housing page. id: {$page.params.housingId}
-  </p>
-  <p>
-    housing page. id: {$currentHousing.id}
-  </p>
-  <p>
-    name: {$currentHousing.name}
-  </p>
-  <p>
-    createdAt: {getLocalTimeFromUTCTimestamp($currentHousing.createdAt).toLocaleString()}
-  </p>
-  <p>
-    created by: {$currentHousing.createdBy}
-  </p>
-  <p>
-    housing page. id: {$page.params.housingId}
-  </p>
-  <p>
-    housing page. id: {$currentHousing.id}
-  </p>
-  <p>
-    name: {$currentHousing.name}
-  </p>
-  <p>
-    createdAt: {getLocalTimeFromUTCTimestamp($currentHousing.createdAt).toLocaleString()}
-  </p>
-  <p>
-    created by: {$currentHousing.createdBy}
-  </p>
-  <p>
-    housing page. id: {$page.params.housingId}
-  </p>
-  <p>
-    housing page. id: {$currentHousing.id}
-  </p>
-  <p>
-    name: {$currentHousing.name}
-  </p>
-  <p>
-    createdAt: {getLocalTimeFromUTCTimestamp($currentHousing.createdAt).toLocaleString()}
-  </p>
-  <p>
-    created by: {$currentHousing.createdBy}
-  </p>
-  <p>
-    housing page. id: {$page.params.housingId}
-  </p>
-  <p>
-    housing page. id: {$currentHousing.id}
-  </p>
-  <p>
-    name: {$currentHousing.name}
-  </p>
-  <p>
-    createdAt: {getLocalTimeFromUTCTimestamp($currentHousing.createdAt).toLocaleString()}
-  </p>
-  <p>
-    created by: {$currentHousing.createdBy}
-  </p>
+
   <Button color="primary" on:click={handleDelete}>Delete {$currentHousing.name}</Button>
 </div>
+
+<style lang="scss">
+  .wrapper {
+    margin: 0 2rem;
+  }
+</style>

@@ -4,7 +4,9 @@ import type { HousingDocType } from "$lib/types";
 import { getUTCTimestamp, getUid } from "$lib/utils";
 import { user } from '$lib/stores';
 
-export async function createHousing(housing: Partial<Omit<HousingDocType, 'name' | 'id' | 'createdAt'>> & Pick<HousingDocType, 'name'>) {
+type NewHousing = Partial<Omit<HousingDocType, 'name' | 'id' | 'createdAt'>> & Pick<HousingDocType, 'name'>;
+
+export async function createHousing(housing: NewHousing) {
   const id = await getUid();
   const currentTime = getUTCTimestamp();
 

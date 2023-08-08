@@ -1,6 +1,6 @@
-import { db } from "$lib/db";
+import { _getById } from "./_get_by_id";
 
 export async function getHousingById(housingId: string) {
-  const doc = await db.get()._?.housings.findOne(housingId).exec();
-  return doc ? doc.toJSON() : null;
+  const doc = await _getById(housingId).exec();
+  return doc?.toJSON();
 }
