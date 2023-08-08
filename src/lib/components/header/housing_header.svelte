@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Avatar, Breadcrumb, BreadcrumbItem } from "yesvelte";
+	import { Avatar, Breadcrumb, BreadcrumbItem, Tooltip } from "yesvelte";
+  import { currentHousing } from '$lib/stores';
 
 </script>
 
@@ -7,7 +8,16 @@
   <Avatar shape="circle" on:click={() => console.log('click on Avatar')}>UN</Avatar>
   <Breadcrumb separator="dots">
     <BreadcrumbItem href="/">Home</BreadcrumbItem>
-    <BreadcrumbItem active>Housing</BreadcrumbItem>
+    <BreadcrumbItem active>
+      <div class="active-item-wrapper">
+        <span class="text-wrapper" id={`housing_page_title_${$currentHousing.id}`}>
+          {$currentHousing.name || 'Housing'}
+        </span>
+        {#if ($currentHousing.name || '').length > 20}
+          <Tooltip  text={$currentHousing.name} target={`#housing_page_title_${$currentHousing.id}`} />
+        {/if}
+      </div>
+    </BreadcrumbItem>
   </Breadcrumb>
 </div>
 
@@ -17,18 +27,33 @@
     justify-content: flex-start;
     align-items: center;
     gap: 2rem;
-    width: 100vw;
+    width: 100%;
     padding: 1rem;
     margin-bottom: 2rem;
-    position: relative;
+    position: sticky;
+    top: 0;
+    background-color: var(--y-body-bg);
 
     &::after {
       content: '';
       position: absolute;
       bottom: 0;
-      width: calc(100vw - 2rem);
+      width: calc(100% - 2rem);
       height: 1px;
       background-color: #e6e6e6;
+    }
+
+    .active-item-wrapper {
+      display: inline-block;
+      position: relative;
+    }
+
+    .text-wrapper {
+      display: inline-block;
+      max-width: 10rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 </style>

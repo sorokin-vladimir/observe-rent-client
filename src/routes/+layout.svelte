@@ -68,35 +68,49 @@
   <link rel='stylesheet' href={tabler}/>
 </svelte:head>
 
-<div class="app-wrapper">
-  {#if isLoading}
-    <div class="spinner-wrapper">
-      <Spinner size="lg" color="primary" />
-    </div>
-  {:else}
-    <slot />
-  {/if}
-  <button class="button" on:click={() => {
-    // TODO: remove button and wrapper
-    isAuth = !isAuth;
-    redirect();
-  }}>{#if isAuth}Logout{:else}Login{/if}</button>
+<div class="app">
+  <div class="app-wrapper">
+    {#if isLoading}
+      <div class="spinner-wrapper">
+        <Spinner size="lg" color="primary" />
+      </div>
+    {:else}
+      <slot />
+    {/if}
+    <button class="button" on:click={() => {
+      // TODO: remove button
+      isAuth = !isAuth;
+      redirect();
+    }}>{#if isAuth}Logout{:else}Login{/if}</button>
+  </div>
 </div>
 
 <style lang="scss">
   :root {
     font-size: 16px;
   }
+
+  .app {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .app-wrapper {
     position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 57rem;
     .button {
       position: fixed;
       bottom: 0;
       right: 0;
     }
     .spinner-wrapper {
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;

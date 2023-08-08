@@ -36,5 +36,80 @@
   <p>
     created by: {$currentHousing.createdBy}
   </p>
+  <p>
+    housing page. id: {$page.params.housingId}
+  </p>
+  <p>
+    housing page. id: {$currentHousing.id}
+  </p>
+  <p>
+    name: {$currentHousing.name}
+  </p>
+  <p>
+    createdAt: {getLocalTimeFromUTCTimestamp($currentHousing.createdAt).toLocaleString()}
+  </p>
+  <p>
+    created by: {$currentHousing.createdBy}
+  </p>
+  <p>
+    housing page. id: {$page.params.housingId}
+  </p>
+  <p>
+    housing page. id: {$currentHousing.id}
+  </p>
+  <p>
+    name: {$currentHousing.name}
+  </p>
+  <p>
+    createdAt: {getLocalTimeFromUTCTimestamp($currentHousing.createdAt).toLocaleString()}
+  </p>
+  <p>
+    created by: {$currentHousing.createdBy}
+  </p>
+  <p>
+    housing page. id: {$page.params.housingId}
+  </p>
+  <p>
+    housing page. id: {$currentHousing.id}
+  </p>
+  <p>
+    name: {$currentHousing.name}
+  </p>
+  <p>
+    createdAt: {getLocalTimeFromUTCTimestamp($currentHousing.createdAt).toLocaleString()}
+  </p>
+  <p>
+    created by: {$currentHousing.createdBy}
+  </p>
+  <p>
+    housing page. id: {$page.params.housingId}
+  </p>
+  <p>
+    housing page. id: {$currentHousing.id}
+  </p>
+  <p>
+    name: {$currentHousing.name}
+  </p>
+  <p>
+    createdAt: {getLocalTimeFromUTCTimestamp($currentHousing.createdAt).toLocaleString()}
+  </p>
+  <p>
+    created by: {$currentHousing.createdBy}
+  </p>
+  <p>
+    housing page. id: {$page.params.housingId}
+  </p>
+  <p>
+    housing page. id: {$currentHousing.id}
+  </p>
+  <p>
+    name: {$currentHousing.name}
+  </p>
+  <p>
+    createdAt: {getLocalTimeFromUTCTimestamp($currentHousing.createdAt).toLocaleString()}
+  </p>
+  <p>
+    created by: {$currentHousing.createdBy}
+  </p>
   <Button color="primary" on:click={handleDelete}>Delete {$currentHousing.name}</Button>
 </div>

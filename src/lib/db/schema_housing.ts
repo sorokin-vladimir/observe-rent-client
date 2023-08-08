@@ -13,9 +13,11 @@ export const housingSchemaLiteral = {
             type: 'string',
             maxLength: 24,
             minLength: 24,
+            final: true,
         },
         name: {
             type: 'string',
+            minLength: 1,
             maxLength: HOUSING_NAME_MAX_LENGTH,
         },
         area: {
@@ -33,6 +35,7 @@ export const housingSchemaLiteral = {
             minimum: 0,
             maximum: 5000000000000,
             multipleOf: 1,
+            final: true,
         },
         updatedAt: {
             type: 'number',
@@ -44,6 +47,7 @@ export const housingSchemaLiteral = {
             type: 'string',
             maxLength: 24,
             minLength: 24,
+            final: true,
         }
     },
     required: ['id', 'name', 'createdAt', 'updatedAt', 'createdBy'],

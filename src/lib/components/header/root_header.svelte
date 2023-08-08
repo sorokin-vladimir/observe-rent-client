@@ -6,7 +6,7 @@
 
   async function addHousing(event: CustomEvent<any>) {
     const h = await createHousing({ name: event.detail.name });
-    // await goto(`/h/${h.id}`);
+    await goto(`/h/${h.id}`);
 	}
 </script>
 
@@ -28,16 +28,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100vw;
+    width: 100%;
     padding: 1rem;
     margin-bottom: 2rem;
-    position: relative;
+    position: sticky;
+    top: 0;
+    background-color: var(--y-body-bg);
 
     &::after {
       content: '';
       position: absolute;
       bottom: 0;
-      width: calc(100vw - 2rem);
+      width: calc(100% - 2rem);
       height: 1px;
       background-color: #e6e6e6;
     }

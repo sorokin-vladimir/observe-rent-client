@@ -25,7 +25,7 @@
     <Input maxlength={HOUSING_NAME_MAX_LENGTH} type="text" placeholder="Name" bind:value={housingName} />
   </div>
   <div class="button-wrapper">
-    <Button color="primary" type="submit" on:click={addHousing}>Add</Button>
+    <Button color="primary" type="submit" on:click={addHousing} disabled={!housingName.length}>Add</Button>
   </div>
 </form>
 
