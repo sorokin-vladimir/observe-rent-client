@@ -20,9 +20,11 @@
     // TODO: looks like this is some dirty hack. Think how it can be changed
     const h = await getHousingById($currentHousing.id);
     if (h) currentHousing.set(h);
+    isReadonly = true;
   }
 
-  let isReadonly = false;
+  let isReadonly = true;
+  let props: { disabled?: boolean } = {};
 
   let name: HousingDocType['name'];
   let area: HousingDocType['area'];
@@ -37,24 +39,33 @@
   }
 
   $: $currentHousing, reassignValues();
+  $: props = isReadonly ? { disabled: true } : {};
 </script>
 
 <div>
   <div class="fields-wrapper">
     <Label mb="0" for="housing_name">Name</Label>
-    <Input id="housing_name" bind:value={name} />
+    <Input id="housing_name" bind:value={name} { ...props } />
     <Label mb="0" for="housing_area">Area</Label>
-    <Input id="housing_area" type="number" bind:value={area} />
+    <Input id="housing_area" type="number" bind:value={area} { ...props } />
     <Label mb="0" for="housing_living_area">Living area</Label>
-    <Input id="housing_living_area" type="number" bind:value={livingArea} />
+    <Input id="housing_living_area" type="number" bind:value={livingArea} { ...props } />
     <Label mb="0" for="housing_address">Address</Label>
-    <Input id="housing_address" bind:value={address} />
+    <Input id="housing_address" bind:value={address} { ...props } />
   </div>
   <div class="buttons-wrapper">
-    <Button color="primary" on:click={() => isReadonly = !isReadonly}>Edit</Button>
-    <Button color="primary" on:click={handleSave}>
-      Save
+    <Button outline style="width: 5rem;" color="primary" on:click={() => isReadonly = !isReadonly}>
+      {#if isReadonly}
+        Edit
+      {:else}
+        Cancel
+      {/if}
     </Button>
+    {#if !isReadonly}
+      <Button color="primary" on:click={handleSave}>
+        Save
+      </Button>
+    {/if}
   </div>
 </div>
 
@@ -66,7 +77,14 @@
     grid-column-gap: 16px;
     grid-row-gap: 8px;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     max-width: 24rem;
+  }
+  .buttons-wrapper {
+    display: flex;
+    justify-content: space-between;
+    max-width: 10rem;
+    margin-left: 14rem;
+    margin-bottom: 2rem;
   }
 </style>

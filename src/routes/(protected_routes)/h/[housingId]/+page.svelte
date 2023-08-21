@@ -3,10 +3,9 @@
   import { page } from '$app/stores';
   import { currentHousing } from '$lib/stores';
 	import { deleteHousing, getHousingById } from '$lib/stores/housing_methods';
-	import { getLocalTimeFromUTCTimestamp } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { Button } from 'yesvelte';
-  import { HousingDataFields } from '$lib/components';
+  import { HousingDataFields, Table } from '$lib/components';
 
   onMount(async () => {
     const h = await getHousingById($page.params.housingId);
@@ -14,6 +13,7 @@
   })
 
   async function handleDelete() {
+    // TODO: show confirmation dialog
     const isDeleted = await deleteHousing($page.params.housingId)
     if (isDeleted) {
       await goto('/');
@@ -24,24 +24,23 @@
 
 <div class="wrapper">
   <HousingDataFields />
-  <p>
-    housing page. id: {$currentHousing.id}
-  </p>
-  <p>
-    name: {$currentHousing.name}
-  </p>
-  <p>
-    createdAt: {getLocalTimeFromUTCTimestamp($currentHousing.createdAt).toLocaleString()}
-  </p>
-  <p>
-    created by: {$currentHousing.createdBy}
-  </p>
 
-  <Button color="primary" on:click={handleDelete}>Delete {$currentHousing.name}</Button>
+  <div class="delete-wrapper">
+    <Button ghost color="danger" on:click={handleDelete}>Delete housing</Button>
+  </div>
+
+  <Table />
 </div>
 
 <style lang="scss">
   .wrapper {
     margin: 0 2rem;
+
+    & .delete-wrapper {
+      width: 24rem;
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 2rem;
+    }
   }
 </style>
