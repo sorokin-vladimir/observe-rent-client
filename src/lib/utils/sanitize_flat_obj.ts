@@ -11,6 +11,8 @@ export function sanitizeFlatObj(obj: Record<string, unknown>) {
       } else if (typeof obj[key] === "string") {
         // TODO: remove `as string`
         newObj[key] = DOMPurify.sanitize(obj[key] as string).trim();
+      } else if (obj[key] === undefined) {
+        // Do nothing
       } else {
         newObj[key] = obj[key];
       }

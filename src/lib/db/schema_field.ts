@@ -1,8 +1,8 @@
 import { dev } from '$app/environment';
-import { HOUSING_NAME_MAX_LENGTH } from '$lib/constants';
+import { FIELD_NAME_MAX_LENGTH } from '$lib/constants';
 
-export const housingSchemaLiteral = {
-    title: 'Housing schema',
+export const fieldSchemaLiteral = {
+    title: 'Field schema',
     // description: '',
     version: 0,
     keyCompression: !dev,
@@ -19,28 +19,13 @@ export const housingSchemaLiteral = {
         name: {
             type: 'string',
             minLength: 1,
-            maxLength: HOUSING_NAME_MAX_LENGTH,
+            maxLength: FIELD_NAME_MAX_LENGTH,
         },
-        area: {
-            type: 'number',
-            minimum: 0,
-            maximum: 10000,
-        },
-        livingArea: {
-            type: 'number',
-            minimum: 0,
-            maximum: 10000,
-        },
-        address: {
+        housingId: {
             type: 'string',
-        },
-        fields: {
-            type: 'array',
-            items: {
-                type: 'string',
-                maxLength: 24,
-                minLength: 24,
-            },
+            maxLength: 24,
+            minLength: 24,
+            final: true,
         },
         // Meta fields
         createdAt: {
@@ -63,6 +48,6 @@ export const housingSchemaLiteral = {
             final: true,
         }
     },
-    required: ['id', 'name', 'createdAt', 'updatedAt', 'createdBy'],
-    indexes: ['name', 'createdAt', 'updatedAt', 'createdBy']
+    required: ['id', 'name', 'housingId', 'createdAt', 'updatedAt', 'createdBy'],
+    indexes: ['name', 'housingId', 'createdAt', 'updatedAt', 'createdBy']
 } as const;
