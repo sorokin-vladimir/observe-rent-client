@@ -3,14 +3,22 @@
   import { page } from '$app/stores';
   import { currentHousing } from '$lib/stores';
 	import { deleteHousing, getHousingById } from '$lib/stores/housing_methods';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { Button } from 'yesvelte';
   import { HousingDataFields, Table } from '$lib/components';
 
   onMount(async () => {
+    if ($currentHousing.id) return;
     const h = await getHousingById($page.params.housingId);
-    if (h) currentHousing.set(h);
-  })
+    if (h) {
+      currentHousing.set(h);
+    } else {
+      await goto('/');
+    }
+  });
+  onDestroy(() => {
+    currentHousing.set({});
+  });
 
   async function handleDelete() {
     // TODO: show confirmation dialog

@@ -4,7 +4,7 @@
 	import { createHousing } from '$lib/stores/housing_methods';
 	import { goto } from '$app/navigation';
 
-  async function addHousing(event: CustomEvent<any>) {
+  async function addHousing(event: CustomEvent<{ name: string; }>) {
     const h = await createHousing({ name: event.detail.name });
     await goto(`/h/${h.id}`);
 	}

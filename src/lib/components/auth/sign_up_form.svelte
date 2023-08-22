@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from "svelte";
   import { Input, Label, Button, Spinner, Icon } from 'yesvelte'
 	// import { isLoadingAuth } from "$lib/stores";
