@@ -1,10 +1,9 @@
-import { _getById } from "./_get_by_id";
+import { _getById, _checkOwner } from "../utils";
 
 export async function deleteHousing(housingId: string) {
-  const doc = await _getById(housingId).exec();
-  if (doc) {
-    await doc.remove();
-    return true;
-  }
-  return false;
+  const doc = await _getById('housings', housingId).exec();
+  _checkOwner(doc);
+
+  await doc?.remove();
+  return true;
 }

@@ -1,5 +1,6 @@
 import type { HousingDocType } from "$lib/types";
 import { action, deepMap } from "nanostores";
+import type { DeepReadonlyObject } from "rxdb";
 
 export const housings = deepMap<{data: Array<HousingDocType>}>({data: []});
 
@@ -9,4 +10,4 @@ export const updateHousings = action(housings, 'updateHousings', (store, updated
   return store.get();
 });
 
-export const currentHousing = deepMap<HousingDocType | Record<string, never>>({});
+export const currentHousing = deepMap<DeepReadonlyObject<HousingDocType> | Record<string, never>>({});

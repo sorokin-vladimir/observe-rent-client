@@ -1,3 +1,4 @@
 export * from './housing';
 export * from './user';
 export * from './field';
+export * from './collections';
