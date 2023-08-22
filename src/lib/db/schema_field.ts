@@ -27,6 +27,11 @@ export const fieldSchemaLiteral = {
             minLength: 24,
             final: true,
         },
+        ordering: {
+            type: 'number',
+            minimum: 0,
+            maximum: 100000000,
+        },
         // Meta fields
         createdAt: {
             type: 'number',

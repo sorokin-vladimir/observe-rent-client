@@ -1,5 +1,9 @@
 import DOMPurify from "dompurify";
 
+export function sanitize(str: string) {
+  return DOMPurify.sanitize(str).trim();
+}
+
 export function sanitizeFlatObj(obj: Record<string, unknown>) {
   const newObj: Record<string, unknown> = {};
   const keys = Object.keys(obj);
@@ -10,7 +14,7 @@ export function sanitizeFlatObj(obj: Record<string, unknown>) {
         newObj[key] = parseFloat(obj[key] as string);
       } else if (typeof obj[key] === "string") {
         // TODO: remove `as string`
-        newObj[key] = DOMPurify.sanitize(obj[key] as string).trim();
+        newObj[key] = sanitize(obj[key] as string);
       } else if (obj[key] === undefined) {
         // Do nothing
       } else {

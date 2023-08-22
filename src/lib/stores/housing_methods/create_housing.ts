@@ -15,12 +15,12 @@ export async function createHousing(housing: NewHousing) {
   const id = await getUid();
   const currentTime = getUTCTimestamp();
 
-  const sanitizedUpdatedFields: Partial<HousingDocType> = sanitizeFlatObj(housing);
-  if (!sanitizedUpdatedFields.name) throw new Error('Housing name is required');
+  const sanitizedNewFields: Partial<HousingDocType> = sanitizeFlatObj(housing);
+  if (!sanitizedNewFields.name) throw new Error('Housing name is required');
 
   const newHousing: HousingDocType = {
-    ...sanitizedUpdatedFields,
-    name: sanitizedUpdatedFields.name,
+    ...sanitizedNewFields,
+    name: sanitizedNewFields.name,
     id,
     createdAt: currentTime,
     updatedAt: currentTime,

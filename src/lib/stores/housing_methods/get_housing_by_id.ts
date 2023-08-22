@@ -1,7 +1,7 @@
-import { _checkOwner, _getById } from "../utils";
+import { _checkOwner, _getHousingById } from "../utils";
 
 export async function getHousingById(housingId: string) {
-  const doc = await _getById('housings', housingId).exec();
+  const doc = await _getHousingById(housingId).exec();
   _checkOwner(doc);
 
   return doc?.toJSON();

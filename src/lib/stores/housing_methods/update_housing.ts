@@ -1,6 +1,6 @@
 import type { HousingDocType } from '$lib/types';
 import { getUTCTimestamp, sanitizeFlatObj } from '$lib/utils';
-import { _checkOwner, _getById } from '../utils';
+import { _checkOwner, _getHousingById } from '../utils';
 
 type UpdateHousingFields = Partial<Omit<
   HousingDocType,
@@ -8,7 +8,7 @@ type UpdateHousingFields = Partial<Omit<
 >>
 
 export async function updateHousing(housingId: string, updatedFields: UpdateHousingFields) {
-  const housingDoc = await _getById('housings', housingId).exec();
+  const housingDoc = await _getHousingById(housingId).exec();
   _checkOwner(housingDoc);
 
   const currentTime = getUTCTimestamp();

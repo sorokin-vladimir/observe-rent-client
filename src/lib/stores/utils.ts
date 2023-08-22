@@ -1,10 +1,13 @@
 import { db } from "$lib/db";
-import type { Collections, FieldDocType, HousingDocType } from "$lib/types";
+import type { FieldDocType, HousingDocType } from "$lib/types";
 import type { RxDocument } from "rxdb";
 import { user } from "./user";
 
-export function _getById(collectionName: Collections, entityId: string) {
-  return db.get()._?.[collectionName].findOne(entityId);
+export function _getHousingById(housingId: string) {
+  return db.get()._?.housings.findOne(housingId);
+}
+export function _getFieldById(housingId: string) {
+  return db.get()._?.fields.findOne(housingId);
 }
 
 export function _checkOwner(doc: RxDocument<HousingDocType> | RxDocument<FieldDocType> | null) {

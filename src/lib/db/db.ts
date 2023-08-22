@@ -1,11 +1,13 @@
 import { dev, browser } from "$app/environment";
 
-import { wrappedValidateZSchemaStorage } from 'rxdb/plugins/validate-z-schema';
 import { addRxPlugin, createRxDatabase, type RxDatabase } from "rxdb";
+
+import { wrappedValidateZSchemaStorage } from 'rxdb/plugins/validate-z-schema';
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
 import { wrappedKeyCompressionStorage } from 'rxdb/plugins/key-compression';
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { RxDBLeaderElectionPlugin } from 'rxdb/plugins/leader-election';
+import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
 
 import type { HousingCollection, FieldCollection } from "$lib/types";
 import { housingSchemaLiteral } from "./schema_housing";
@@ -26,6 +28,7 @@ export async function getDB(name: string, password: string) {
   if (dev) {
     addRxPlugin(RxDBDevModePlugin);
   }
+  addRxPlugin(RxDBUpdatePlugin);
 
   const db = await createDB(name, password);
   await addCollections(db);
