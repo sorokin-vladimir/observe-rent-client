@@ -6,21 +6,26 @@
   import { page } from '$app/stores';
 	import { isValidPath } from '$lib/utils';
   import { getDB, db } from '$lib/db';
-	import { updateHousings, user } from '$lib/stores';
+	import { updateFields, updateHousings, user } from '$lib/stores';
 	import { Spinner } from 'yesvelte';
 
   let isAuth = true;
   let isLoading = true;
 
   async function redirect() {
-    let querySub: Subscription | undefined;
+    let queryHSub: Subscription | undefined;
+    let queryFSub: Subscription | undefined;
     if (isAuth) {
       /** Create (or get) DB */
       const _db = await getDB('test_name', 'myPassword');
       /** Subscribe to updates */
-      const query = _db?.housings.find();
-      querySub = query?.$.subscribe((results) => {
+      const queryH = _db?.housings.find();
+      const queryF = _db?.fields.find();
+      queryHSub = queryH?.$.subscribe((results) => {
         updateHousings(results.map((result) => result.toJSON()))
+      })
+      queryFSub = queryF?.$.subscribe((results) => {
+        updateFields(results.map((result) => result.toJSON()))
       })
       /** Set the DB in a store to easy access */
       if (!_db) throw new Error('DB is not defined');
@@ -42,7 +47,8 @@
       await goto('/');
     } else {
       /** Unsubscribe from updates */
-      querySub?.unsubscribe()
+      queryHSub?.unsubscribe();
+      queryFSub?.unsubscribe();
       /** Destroy the DB */
       await $db?._.destroy();
       /** Remove the DB from a store */
