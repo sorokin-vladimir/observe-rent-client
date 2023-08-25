@@ -2,11 +2,11 @@ import type { HousingDocType } from "$lib/types";
 import { action, deepMap } from "nanostores";
 import type { DeepReadonlyObject } from "rxdb";
 
-export const housings = deepMap<{data: Array<HousingDocType>}>({data: []});
+export const housings = deepMap<{_: Array<HousingDocType>}>({_: []});
 
 export const updateHousings = action(housings, 'updateHousings', (store, updatedData) => {
   // TODO: Add deep comparation to more granular updates
-  store.set({data: updatedData});
+  store.set({_: updatedData});
   return store.get();
 });
 

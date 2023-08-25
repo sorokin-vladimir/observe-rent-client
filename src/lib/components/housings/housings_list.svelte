@@ -4,10 +4,10 @@
 </script>
 
 <div class="list-wrapper">
-  {#if $housings.data.length === 0}
+  {#if $housings._.length === 0}
     <p>No housings</p>
   {/if}
-  {#each $housings.data as housing}
+  {#each $housings._ as housing}
     <HousingCard id={housing.id} name={housing.name} area={housing.area} livingArea={housing.livingArea} />
   {/each}
 </div>
