@@ -1,7 +1,7 @@
 import { db } from "$lib/db";
 import type { HousingDocType } from "$lib/types";
 import { getUTCTimestamp, getUid, sanitizeFlatObj } from "$lib/utils";
-import { user } from '$lib/stores';
+import { _getUserId } from "../utils";
 
 type NewHousing = Partial<Omit<
   HousingDocType,
@@ -9,8 +9,7 @@ type NewHousing = Partial<Omit<
 >> & Pick<HousingDocType, 'name'>;
 
 export async function createHousing(housing: NewHousing) {
-  const userId = user.get()?.id
-  if (!userId) throw new Error('User not found');
+  const userId = _getUserId();
 
   const id = await getUid();
   const currentTime = getUTCTimestamp();

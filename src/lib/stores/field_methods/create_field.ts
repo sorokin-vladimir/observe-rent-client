@@ -1,8 +1,7 @@
 import type { FieldDocType } from "$lib/types";
 import { getUTCTimestamp, getUid, isValidId, sanitizeFlatObj } from "$lib/utils";
-import { user } from "../user";
 import { db } from "$lib/db";
-import { _getHousingById } from "../utils";
+import { _getHousingById, _getUserId } from "../utils";
 
 
 type NewField = Partial<Omit<
@@ -10,8 +9,7 @@ type NewField = Partial<Omit<
 >> & Pick<FieldDocType, 'name' | 'housingId'>;
 
 export async function createField(field: NewField) {
-  const userId = user.get()?.id
-  if (!userId) throw new Error('User not found');
+  const userId = _getUserId();
 
   const id = await getUid();
   const currentTime = getUTCTimestamp();
