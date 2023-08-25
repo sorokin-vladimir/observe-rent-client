@@ -5,32 +5,13 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
 	import { isValidPath } from '$lib/utils';
-  import { getDB, db } from '$lib/db';
-	import { updateFields, updateHousings, user } from '$lib/stores';
+	import { ui, user } from '$lib/stores';
 	import { Spinner } from 'yesvelte';
 
   let isAuth = true;
-  let isLoading = true;
 
   async function redirect() {
-    let queryHSub: Subscription | undefined;
-    let queryFSub: Subscription | undefined;
     if (isAuth) {
-      /** Create (or get) DB */
-      const _db = await getDB('test_name', 'myPassword');
-      /** Subscribe to updates */
-      const queryH = _db?.housings.find();
-      const queryF = _db?.fields.find();
-      queryHSub = queryH?.$.subscribe((results) => {
-        updateHousings(results.map((result) => result.toJSON()))
-      })
-      queryFSub = queryF?.$.subscribe((results) => {
-        updateFields(results.map((result) => result.toJSON()))
-      })
-      /** Set the DB in a store to easy access */
-      if (!_db) throw new Error('DB is not defined');
-      db.set({ _: _db })
-
       /** Set user mock */
       user.set({
         id: 'YKYo1qj9pHaJAnKgRumAk70n',
@@ -38,7 +19,6 @@
         pwd: 'myPassword',
       })
 
-      isLoading = false;
       const { pathname } = $page.url;
       if (isValidPath(pathname)) {
         await goto(pathname);
@@ -46,18 +26,6 @@
       }
       await goto('/');
     } else {
-      /** Unsubscribe from updates */
-      queryHSub?.unsubscribe();
-      queryFSub?.unsubscribe();
-      /** Destroy the DB */
-      await $db?._.destroy();
-      /** Remove the DB from a store */
-      db.set({});
-
-      /** Remove user mock */
-      user.set({});
-
-      isLoading = false;
       await goto('/login');
     }
   }
@@ -76,7 +44,7 @@
 
 <div class="app">
   <div class="app-wrapper">
-    {#if isLoading}
+    {#if $ui.isFullscreenLoading}
       <div class="spinner-wrapper">
         <Spinner size="lg" color="primary" />
       </div>
