@@ -1,25 +1,23 @@
 <script lang="ts">
   import { currentHousing } from '$lib/stores';
-	import { getHousingById, updateHousing } from '$lib/stores/housing_methods';
+	import { updateHousing } from '$lib/stores/housing_methods';
 	import type { HousingDocType } from '$lib/types';
 	import { Button, Input, Label } from 'yesvelte';
 
   async function handleSave() {
     const updatedData: Partial<HousingDocType> = {};
-    if (name && name !== $currentHousing.name) updatedData.name = name;
-    if (area && area !== $currentHousing.area) updatedData.area = area;
-    if (livingArea && livingArea !== $currentHousing.livingArea) updatedData.livingArea = livingArea;
-    if (address && address !== $currentHousing.address) updatedData.address = address;
+    if (name && name !== $currentHousing?.name) updatedData.name = name;
+    if (area && area !== $currentHousing?.area) updatedData.area = area;
+    if (livingArea && livingArea !== $currentHousing?.livingArea) updatedData.livingArea = livingArea;
+    if (address && address !== $currentHousing?.address) updatedData.address = address;
 
+    if (!$currentHousing?.id) return;
     const result = await updateHousing($currentHousing.id, updatedData);
 
     if (!result) {
       // TODO: show error
       return;
     }
-    // TODO: looks like this is some dirty hack. Think how it can be changed
-    const h = await getHousingById($currentHousing.id);
-    if (h) currentHousing.set(h);
     isReadonly = true;
   }
 
@@ -32,10 +30,10 @@
   let address: HousingDocType['address'];
 
   function reassignValues() {
-    name = $currentHousing.name;
-    area = $currentHousing.area;
-    livingArea = $currentHousing.livingArea;
-    address = $currentHousing.address;
+    name = $currentHousing?.name ?? '';
+    area = $currentHousing?.area;
+    livingArea = $currentHousing?.livingArea;
+    address = $currentHousing?.address;
   }
 
   $: $currentHousing, reassignValues();

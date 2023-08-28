@@ -10,11 +10,11 @@
     <BreadcrumbItem href="/">Home</BreadcrumbItem>
     <BreadcrumbItem active>
       <div class="active-item-wrapper">
-        <span class="text-wrapper" id={`housing_page_title_${$currentHousing.id}`}>
-          {$currentHousing.name || 'Housing'}
+        <span class="text-wrapper" id={`housing_page_title_${$currentHousing?.id}`}>
+          {$currentHousing?.name || 'Housing'}
         </span>
-        {#if ($currentHousing.name || '').length > 20}
-          <Tooltip  text={$currentHousing.name} target={`#housing_page_title_${$currentHousing.id}`} />
+        {#if ($currentHousing?.name || '').length > 20}
+          <Tooltip  text={$currentHousing?.name} target={`#housing_page_title_${$currentHousing?.id}`} />
         {/if}
       </div>
     </BreadcrumbItem>

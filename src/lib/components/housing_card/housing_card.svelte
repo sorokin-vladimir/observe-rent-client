@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { getHousingById } from "$lib/stores/housing_methods";
 	import type { HousingDocType } from "$lib/types";
 	import { Card, CardBody, Tooltip } from "yesvelte";
 

@@ -1,6 +1,6 @@
+// import { goto } from "$app/navigation";
 import type { HousingDocType } from "$lib/types";
-import { action, deepMap } from "nanostores";
-import type { DeepReadonlyObject } from "rxdb";
+import { action, atom, computed, deepMap } from "nanostores";
 
 export const housings = deepMap<{_: Array<HousingDocType>}>({_: []});
 
@@ -10,4 +10,13 @@ export const updateHousings = action(housings, 'updateHousings', (store, updated
   return store.get();
 });
 
-export const currentHousing = deepMap<DeepReadonlyObject<HousingDocType> | Record<string, never>>({});
+export const currentHousingId = atom<string | null>(null);
+export const currentHousing = computed([housings, currentHousingId], (housings, currentHousingId) => {
+  if (!currentHousingId) return null;
+  const housing = housings._.find((housing) => housing.id === currentHousingId);
+  if (!housing) {
+    // goto('/');
+    return null;
+  }
+  return housing;
+});

@@ -1,23 +1,18 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
   import { page } from '$app/stores';
-  import { currentHousing } from '$lib/stores';
-	import { deleteHousing, getHousingById } from '$lib/stores/housing_methods';
+  import { currentHousingId } from '$lib/stores';
+	import { deleteHousing } from '$lib/stores/housing_methods';
 	import { onDestroy, onMount } from 'svelte';
 	import { Button } from 'yesvelte';
   import { HousingDataFields, Table } from '$lib/components';
 
   onMount(async () => {
-    if ($currentHousing.id) return;
-    const h = await getHousingById($page.params.housingId);
-    if (h) {
-      currentHousing.set(h);
-    } else {
-      await goto('/');
-    }
+    if ($currentHousingId) return;
+    currentHousingId.set($page.params.housingId);
   });
   onDestroy(() => {
-    currentHousing.set({});
+    currentHousingId.set(null);
   });
 
   async function handleDelete() {

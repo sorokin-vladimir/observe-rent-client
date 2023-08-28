@@ -1,9 +1,9 @@
 <script lang="ts">
   import { HousingsList, RootHeader } from '$lib/components';
-  import { currentHousing } from '$lib/stores';
+  import { currentHousingId } from '$lib/stores';
 	import { onMount } from 'svelte';
 
-  onMount(() => currentHousing.set({}));
+  onMount(() => currentHousingId.set(null));
 </script>
 
 <div>
