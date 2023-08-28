@@ -42,6 +42,12 @@ export const housingSchemaLiteral = {
                 minLength: 24,
             },
         },
+        filledMonths: {
+            type: 'array',
+            items: {
+                type: 'number',
+            },
+        },
         // Meta fields
         createdAt: {
             type: 'number',

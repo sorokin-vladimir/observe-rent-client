@@ -32,6 +32,26 @@ export const fieldSchemaLiteral = {
             minimum: 0,
             maximum: 100000000,
         },
+        unit: {
+            type: 'string',
+        },
+        data: {
+            type: 'array',
+            items: {
+                type: 'object',
+                properties: {
+                    month: {
+                        type: 'number',
+                    },
+                    amount: {
+                        type: 'number',
+                    },
+                    price: {
+                        type: 'number',
+                    },
+                },
+            },
+        },
         // Meta fields
         createdAt: {
             type: 'number',
