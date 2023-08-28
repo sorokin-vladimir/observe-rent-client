@@ -14,3 +14,15 @@ export function getUTCTimestamp(localTime?: string) {
 export function getLocalTimeFromUTCTimestamp(utcTimestamp: number) {
   return new Date(utcTimestamp);
 }
+
+export function addMonths(date: Date | string, months = 1) {
+  const local = new Date(date);
+  return new Date(local.setMonth(local.getMonth() + months));
+}
+
+export function getTimestampForMonthlyData() {
+  // TODO: implement it
+
+  // tmp
+  return getUTCTimestamp();
+}
