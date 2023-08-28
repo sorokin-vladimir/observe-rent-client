@@ -14,7 +14,14 @@ export const reinsertFields = action(fields, 'reinsertFields', (store, updatedDa
   return store.get();
 });
 
-export const addField = action(fields, 'addField', (store, updatedData) => {
+const addField = action(fields, 'addField', (store, updatedData) => {
+  const fields = store.get()._;
+  fields?.set(updatedData.id, updatedData);
+  store.set({_: fields});
+  return store.get();
+});
+
+const updateField = action(fields, 'updateField', (store, updatedData) => {
   const fields = store.get()._;
   fields?.set(updatedData.id, updatedData);
   store.set({_: fields});
@@ -30,6 +37,7 @@ function _subscriber(): Subscription {
         break;
       }
       case 'UPDATE': {
+        updateField(field);
         break;
       }
       case 'DELETE': {
@@ -39,16 +47,16 @@ function _subscriber(): Subscription {
   })
 }
 
-let sub: Subscription;
+let sub: Subscription | undefined;
 // Set existing fields after opening a housing and subscribe to updates
 onSet(currentHousing, async ({ newValue }) => {
-  if (newValue.id) {
+  if (newValue?.id) {
     const fieldsId = newValue.fields?.concat() ?? [];
     const fields = await getFieldsByIds(fieldsId);
     reinsertFields(fields);
     sub = _subscriber();
   } else {
     reinsertFields(null);
-    sub.unsubscribe();
+    sub?.unsubscribe();
   }
 });
