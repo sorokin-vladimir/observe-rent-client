@@ -1,19 +1,22 @@
 <script lang="ts">
+	import { timestampToReadableDate } from "$lib/utils";
+
   export let name: string | undefined;
   export let fieldId: string | null;
-  export let month: string | undefined;
+  export let month: number | undefined;
   export let amount: number | undefined;
   export let price: number | undefined;
   export let unit: string | undefined;
 
   const className = `cell-wrapper ${name ? 'first-col' : ''}`;
+  console.log(`month`, month);
 </script>
 
 <div class={className}>
   {#if name}
     {name}
   {:else if month && amount === undefined && price === undefined}
-    {month}
+    {timestampToReadableDate(month)}
   {:else if amount !== undefined && price !== undefined}
     {amount} {unit || 'kg'} x {price}
   {:else}

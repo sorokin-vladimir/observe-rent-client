@@ -1,6 +1,6 @@
 export function getUTCTimestamp(localTime?: string) {
   const local = localTime ? new Date(localTime) : new Date();
-  return new Date(Date.UTC(
+  return Date.UTC(
     local.getUTCFullYear(),
     local.getUTCMonth(),
     local.getUTCDate(),
@@ -8,7 +8,7 @@ export function getUTCTimestamp(localTime?: string) {
     local.getUTCMinutes(),
     local.getUTCSeconds(),
     local.getUTCMilliseconds()
-  )).getTime();
+  );
 }
 
 export function getLocalTimeFromUTCTimestamp(utcTimestamp: number) {
@@ -20,9 +20,15 @@ export function addMonths(date: Date | string, months = 1) {
   return new Date(local.setMonth(local.getMonth() + months));
 }
 
-export function getTimestampForMonthlyData() {
-  // TODO: implement it
+export function getTimestampForMonthlyData(localTime?: Date | string) {
+  const local = localTime ? new Date(localTime) : new Date();
+  return Date.UTC(
+    local.getUTCFullYear(),
+    local.getUTCMonth(),
+  );
+}
 
-  // tmp
-  return getUTCTimestamp();
+export function timestampToReadableDate(timestamp: number) {
+  const date = new Date(timestamp);
+  return date.toLocaleDateString('en-UK', {month: 'short', year: 'numeric'});
 }

@@ -8,7 +8,7 @@ type TableDataCell = {
   amount?: number;
   price?: number;
   unit?: string;
-  month?: string;
+  month?: number;
 };
 
 export const tableData = computed(fields, (fields) => {
@@ -18,7 +18,7 @@ export const tableData = computed(fields, (fields) => {
   const filledMonths = currentHousing.get()?.filledMonths ?? [];
   for (const filledMonth of filledMonths) {
     // TODO: change to human-readable format of date
-    data.push({ month: filledMonth.toString(), fieldId: null });
+    data.push({ month: filledMonth, fieldId: null });
   }
 
   for (const field of fields._) {
@@ -31,7 +31,7 @@ export const tableData = computed(fields, (fields) => {
       map.set(monthlyData.month, {
         amount: monthlyData.amount,
         price: monthlyData.price,
-        month: monthlyData.month.toString(),
+        month: monthlyData.month,
         fieldId: field[0],
         unit: field[1].unit,
       });

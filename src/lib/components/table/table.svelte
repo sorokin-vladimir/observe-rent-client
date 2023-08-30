@@ -26,7 +26,6 @@
 <div>
   <div class="table">
     {#if $fields._?.size}
-    <!-- <div class="cell first-col">Name</div> -->
       {#each $tableData as data}
         <Cell
           name={data.name}
