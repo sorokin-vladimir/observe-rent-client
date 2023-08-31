@@ -3,6 +3,7 @@
   import AddHousingForm from './add_housing_form.svelte';
 	import { createHousing } from '$lib/stores/housing_methods';
 	import { goto } from '$app/navigation';
+  import Header from './header.svelte';
 
   async function addHousing(event: CustomEvent<{ name: string; }>) {
     const h = await createHousing({ name: event.detail.name });
@@ -10,39 +11,17 @@
 	}
 </script>
 
-<div class="wrapper">
-  <Avatar shape="circle" on:click={() => console.log('click on Avatar')}>UN</Avatar>
-  <Button color="primary">
-    <Icon name="plus" />
-    Add housing
-  </Button>
-  <Popover trigger="click">
-    <PopoverBody>
-      <AddHousingForm on:addhousing={addHousing} />
-    </PopoverBody>
-  </Popover>
-</div>
-
-<style lang="scss">
-  .wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 1rem 2rem;
-    margin-bottom: 2rem;
-    position: sticky;
-    top: 0;
-    background-color: var(--y-body-bg);
-
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 1rem;
-      width: calc(100% - 2rem);
-      height: 1px;
-      background-color: #e6e6e6;
-    }
-  }
-</style>
+<Header>
+  <Avatar slot="avatar" shape="circle" on:click={() => console.log('click on Avatar')}>UN</Avatar>
+  <div slot="action">
+    <Button color="primary">
+      <Icon name="plus" />
+      Add housing
+    </Button>
+    <Popover trigger="click">
+      <PopoverBody>
+        <AddHousingForm on:addhousing={addHousing} />
+      </PopoverBody>
+    </Popover>
+  </div>
+</Header>
