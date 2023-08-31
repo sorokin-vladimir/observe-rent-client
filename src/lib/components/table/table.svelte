@@ -38,7 +38,7 @@
   {showModal.toString()}
   <div class="table">
     {#if $fields._?.size}
-      {#each $tableData as data}
+      {#each $tableData as data ((data.fieldId || '_') + data.month + data.name)}
         <Cell
           name={data.name}
           fieldId={data.fieldId}

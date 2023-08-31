@@ -7,7 +7,7 @@
   {#if $housings._.length === 0}
     <p>No housings</p>
   {/if}
-  {#each $housings._ as housing}
+  {#each $housings._ as housing (housing.id)}
     <HousingCard id={housing.id} name={housing.name} area={housing.area} livingArea={housing.livingArea} />
   {/each}
 </div>

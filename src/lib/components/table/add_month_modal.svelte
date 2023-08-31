@@ -51,7 +51,7 @@ import { createEventDispatcher } from "svelte";
 		<div class="inputs-wrap">
       <Label for="date">Date</Label>
       <DatePicker id="date" bind:value={date} formatText={formatDate} />
-      {#each ($fields._ || []) as field}
+      {#each ($fields._ || []) as field (field[0])}
       <h3 class="field-name">{field[1].name}</h3>
        <span />
         <Label for={field[0] + '_amount'}>Amount</Label>
