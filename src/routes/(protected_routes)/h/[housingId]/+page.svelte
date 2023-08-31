@@ -28,11 +28,11 @@
 <div class="wrapper">
   <HousingDataFields />
 
+  <Table />
+
   <div class="delete-wrapper">
     <Button ghost color="danger" on:click={handleDelete}>Delete housing</Button>
   </div>
-
-  <Table />
 </div>
 
 <style lang="scss">
@@ -42,8 +42,8 @@
     & .delete-wrapper {
       width: 24rem;
       display: flex;
-      justify-content: flex-end;
-      margin-bottom: 2rem;
+      justify-content: flex-start;
+      margin-top: 3rem;
     }
   }
 </style>

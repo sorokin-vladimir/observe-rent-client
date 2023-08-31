@@ -21,6 +21,10 @@ export const fieldSchemaLiteral = {
             minLength: 1,
             maxLength: FIELD_NAME_MAX_LENGTH,
         },
+        description: {
+            type: 'string',
+            maxLength: FIELD_NAME_MAX_LENGTH * 5,
+        },
         housingId: {
             type: 'string',
             maxLength: 24,

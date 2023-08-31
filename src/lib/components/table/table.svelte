@@ -1,22 +1,33 @@
 <script lang="ts">
 	import { Button, Popover, PopoverBody } from "yesvelte";
   import AddFieldForm from "./add_field_form.svelte";
-	import { addMonthlyData, createField } from "$lib/stores/field_methods";
+  import AddMonthlyData from './add_month_modal.svelte';
+	import { createField } from "$lib/stores/field_methods";
 	import { currentHousing, currentHousingId, fields, tableData } from "$lib/stores";
   import Cell from './cell.svelte';
-	import { getTimestampForMonthlyData } from "$lib/utils";
 
-  async function addField(event: CustomEvent<{ name: string; }>) {
+  let showAddFieldPopover = false;
+  let showModal = false;
+
+  async function addField(event: CustomEvent<{ name: string; description: string; unit: string; }>) {
     if (!$currentHousingId) return;
-    await createField({ name: event.detail.name, housingId: $currentHousingId });
+    await createField({
+      name: event.detail.name,
+      housingId: $currentHousingId,
+      description: event.detail.description,
+      unit: event.detail.unit,
+    });
 	}
 
-  async function addMonth() {
-    const dataToUpdate: {fieldId: string; amount: number; price:number}[] = [];
-    $fields._?.forEach((val, key) => {
-      dataToUpdate.push({ fieldId: key, amount: (Math.random() * 100)^0, price: (Math.random() * 100)^0 });
-    })
-    addMonthlyData(getTimestampForMonthlyData(), dataToUpdate);
+  async function openAddMonthlyDataModal() {
+    showModal = true;
+  }
+  function closeAddMonthlyDataModal() {
+    showModal = false;
+  }
+  function toggleAddFieldPopover() {
+    showAddFieldPopover = !showAddFieldPopover;
+    showAddFieldPopover = !showAddFieldPopover;
   }
 
   $: document.documentElement.style.setProperty('--table-rows', ($fields._?.size ?? 0).toString());
@@ -24,6 +35,7 @@
 </script>
 
 <div>
+  {showModal.toString()}
   <div class="table">
     {#if $fields._?.size}
       {#each $tableData as data}
@@ -34,6 +46,8 @@
           amount={data.amount}
           price={data.price}
           unit={data.unit}
+          type={data.type}
+          description={data.description}
         />
       {/each}
     {:else}
@@ -41,18 +55,19 @@
     {/if}
   </div>
   <div>
-    <Button ghost color="primary">
+    <Button ghost color="primary" on:click={toggleAddFieldPopover}>
       Add Field
     </Button>
-    <Popover trigger="click">
+    <Popover bind:show={showAddFieldPopover}>
       <PopoverBody>
-        <AddFieldForm on:addfield={addField} />
+        <AddFieldForm on:addfield={addField} on:closeAddFieldPopover={toggleAddFieldPopover} />
       </PopoverBody>
     </Popover>
   </div>
-  <Button on:click={addMonth}>
+  <Button on:click={openAddMonthlyDataModal}>
     Add Month
   </Button>
+  <AddMonthlyData on:closeAddMonthlyDataModal={closeAddMonthlyDataModal} show={showModal} />
 </div>
 
 <style lang="scss">

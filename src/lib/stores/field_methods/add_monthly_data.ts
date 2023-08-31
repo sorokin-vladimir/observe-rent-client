@@ -5,8 +5,8 @@ import { _checkOwner, _getHousingById } from "../utils";
 
 type MonthlyArrayElement = ArrayElement<FieldDocType['data']>;
 type MonthlyData = {
-  amount: MonthlyArrayElement['amount'];
-  price: MonthlyArrayElement['price'];
+  amount?: MonthlyArrayElement['amount'];
+  price?: MonthlyArrayElement['price'];
   fieldId: string;
 };
 
@@ -39,7 +39,15 @@ export async function addMonthlyData(month: MonthlyArrayElement['month'], data: 
     if (isFieldAlreadyHasMonthlyData) throw new Error('Field already has monthly data');
 
     // update field with monthly data
-    const dataToPush = data.find(({ fieldId }) => fieldId === field[0]) ?? { amount: null, price: null };
+    const dataToPush = data.find(({ fieldId }) => fieldId === field[0]);
+    // if one of the presented numbers is not a number or is NaN or is 0 - skip saving of this field
+    if (
+      !dataToPush ||
+      typeof dataToPush.amount !== 'number' ||
+      Number.isNaN(dataToPush.amount) ||
+      typeof dataToPush.price !== 'number' ||
+      Number.isNaN(dataToPush.price) // ||
+    ) continue;
     await field[1].update({
       $push: {
         data: {
@@ -55,9 +63,14 @@ export async function addMonthlyData(month: MonthlyArrayElement['month'], data: 
   }
 
   // update housing with filled months
+  const filledMonths = (housing.filledMonths ?? []).slice();
+  filledMonths.push(month);
+  filledMonths.sort();
   await housingDoc?.update({
-    $push: {
-      filledMonths: month,
+    $set: {
+      filledMonths,
     }
-  })
+  });
+
+  return true;
 }
