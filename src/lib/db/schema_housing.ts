@@ -1,10 +1,11 @@
 import { dev } from '$app/environment';
 import { HOUSING_NAME_MAX_LENGTH } from '$lib/constants';
+import { housingMigrations } from './migrations';
 
 export const housingSchemaLiteral = {
     title: 'Housing schema',
     // description: '',
-    version: 0,
+    version: parseInt(Object.keys(housingMigrations).at(-1) ?? '0', 10),
     keyCompression: !dev,
     primaryKey: 'id',
     type: 'object',
@@ -38,6 +39,14 @@ export const housingSchemaLiteral = {
             type: 'string',
         },
         fields: {
+            type: 'array',
+            items: {
+                type: 'string',
+                maxLength: 24,
+                minLength: 24,
+            },
+        },
+        counters: {
             type: 'array',
             items: {
                 type: 'string',

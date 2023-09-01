@@ -5,7 +5,7 @@ import {
   type RxDocument,
   type RxCollection,
 } from 'rxdb';
-import { housingSchemaLiteral } from '$lib/db';
+import { housingSchemaLiteral } from '$lib/db/schema_housing';
 
 const housingSchemaTyped = toTypedRxJsonSchema(housingSchemaLiteral);
 

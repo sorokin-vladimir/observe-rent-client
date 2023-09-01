@@ -8,11 +8,14 @@ import { wrappedKeyCompressionStorage } from 'rxdb/plugins/key-compression';
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { RxDBLeaderElectionPlugin } from 'rxdb/plugins/leader-election';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
+import { RxDBMigrationPlugin } from 'rxdb/plugins/migration';
 
 import type { HousingCollection, FieldCollection } from "$lib/types";
 import { housingSchemaLiteral } from "./schema_housing";
 import { deepMap } from "nanostores";
 import { fieldSchemaLiteral } from "./schema_field";
+import { counterSchemaLiteral } from './schema_counter';
+import { counterMigrations, fieldMigrations, housingMigrations } from "./migrations";
 
 export type DatabaseCollections = {
   housings: HousingCollection;
@@ -29,6 +32,7 @@ export async function getDB(name: string, password: string) {
     addRxPlugin(RxDBDevModePlugin);
   }
   addRxPlugin(RxDBUpdatePlugin);
+  addRxPlugin(RxDBMigrationPlugin);
 
   const db = await createDB(name, password);
   await addCollections(db);
@@ -60,9 +64,15 @@ async function addCollections(db: Database) {
   await db.addCollections({
     housings: {
       schema: housingSchemaLiteral,
+      migrationStrategies: housingMigrations,
     },
     fields: {
-      schema: fieldSchemaLiteral
+      schema: fieldSchemaLiteral,
+      migrationStrategies: fieldMigrations,
+    },
+    counters: {
+      schema: counterSchemaLiteral,
+      migrationStrategies: counterMigrations,
     }
   });
 }

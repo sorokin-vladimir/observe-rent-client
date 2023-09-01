@@ -5,7 +5,7 @@ import {
   type RxDocument,
   type RxCollection,
 } from 'rxdb';
-import { fieldSchemaLiteral } from '$lib/db';
+import { fieldSchemaLiteral } from '$lib/db/schema_field';
 
 const fieldSchemaTyped = toTypedRxJsonSchema(fieldSchemaLiteral);
 

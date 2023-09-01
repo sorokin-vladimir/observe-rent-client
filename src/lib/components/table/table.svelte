@@ -35,7 +35,6 @@
 </script>
 
 <div>
-  {showModal.toString()}
   <div class="table">
     {#if $fields._?.size}
       {#each $tableData as data ((data.fieldId || '_') + data.month + data.name)}

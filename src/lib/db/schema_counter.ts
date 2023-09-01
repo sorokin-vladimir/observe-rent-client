@@ -1,11 +1,11 @@
 import { dev } from '$app/environment';
 import { FIELD_NAME_MAX_LENGTH } from '$lib/constants';
-import { fieldMigrations } from './migrations';
+import { counterMigrations } from './migrations';
 
-export const fieldSchemaLiteral = {
-    title: 'Field schema',
+export const counterSchemaLiteral = {
+    title: 'Counter schema',
     // description: '',
-    version: parseInt(Object.keys(fieldMigrations).at(-1) ?? '0', 10),
+    version: parseInt(Object.keys(counterMigrations).at(-1) ?? '0', 10),
     keyCompression: !dev,
     primaryKey: 'id',
     type: 'object',
@@ -40,22 +40,9 @@ export const fieldSchemaLiteral = {
         unit: {
             type: 'string',
         },
-        data: {
-            type: 'array',
-            items: {
-                type: 'object',
-                properties: {
-                    month: {
-                        type: 'number',
-                    },
-                    amount: {
-                        type: 'number',
-                    },
-                    price: {
-                        type: 'number',
-                    },
-                },
-            },
+        value: {
+            type: 'number',
+            minimum: 0,
         },
         // Meta fields
         createdAt: {

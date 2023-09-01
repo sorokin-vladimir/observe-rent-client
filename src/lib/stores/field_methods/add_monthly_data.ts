@@ -40,13 +40,13 @@ export async function addMonthlyData(month: MonthlyArrayElement['month'], data: 
 
     // update field with monthly data
     const dataToPush = data.find(({ fieldId }) => fieldId === field[0]);
-    // if one of the presented numbers is not a number or is NaN or is 0 - skip saving of this field
+    // if one of the presented numbers is not a number or is NaN - skip saving of this field
     if (
       !dataToPush ||
       typeof dataToPush.amount !== 'number' ||
       Number.isNaN(dataToPush.amount) ||
       typeof dataToPush.price !== 'number' ||
-      Number.isNaN(dataToPush.price) // ||
+      Number.isNaN(dataToPush.price)
     ) continue;
     await field[1].update({
       $push: {
