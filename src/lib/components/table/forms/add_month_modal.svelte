@@ -1,8 +1,8 @@
 <script lang="ts">
-import { fields } from "$lib/stores";
+  import { fields, counters } from "$lib/stores";
 	import { addMonthlyData } from "$lib/stores/field_methods";
 	import { getTimestampForMonthlyData, timestampToReadableDate } from "$lib/utils";
-import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher } from "svelte";
 	import { Button, DatePicker, Input, Label, Modal, ModalBody, ModalFooter } from "yesvelte";
 
   export let show: boolean;
@@ -43,7 +43,8 @@ import { createEventDispatcher } from "svelte";
     clearData();
   }
 
-  $: document.documentElement.style.setProperty('--add-monthly-data-modal-rows', ($fields._?.size ?? 0).toString());
+  $: document.documentElement.style.setProperty('--add-monthly-data-modal-rows', (($fields._?.size ?? 0) + ($counters._?.size ?? 0)).toString());
+  // TODO: вынести инпуты в отдельные компоненты с валидацией
 </script>
 
 <Modal scrollable title="Add new monthly data" bind:show placement="center">
@@ -58,6 +59,13 @@ import { createEventDispatcher } from "svelte";
         <Input type="number" id={field[0] + '_amount'} bind:value={data[field[0] + '_amount']} />
         <Label for={field[0] + '_Price'}>Price</Label>
         <Input type="number" id={field[0] + '_price'} bind:value={data[field[0] + '_price']} />
+      {/each}
+
+      {#each ($counters._ || []) as counter (counter[0])}
+      <h3 class="field-name">{counter[1].name}</h3>
+       <span />
+        <Label for={counter[0] + '_amount'}>Value</Label>
+        <Input type="number" id={counter[0] + '_value'} bind:value={data[counter[0] + '_value']} />
       {/each}
     </div>
 	</ModalBody>
