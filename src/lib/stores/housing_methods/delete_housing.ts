@@ -10,6 +10,12 @@ export async function deleteHousing(housingId: string) {
     const result = await db.get()._.collections.fields.bulkRemove(fieldsToRemove);
     if (result.error) throw new Error('Error while removing fields');
   }
+  const countersToRemove = doc?.counters ?? [];
+  if (countersToRemove.length) {
+    const result = await db.get()._.collections.counters.bulkRemove(countersToRemove);
+    if (result.error) throw new Error('Error while removing counters');
+  }
+
   await doc?.remove();
   return true;
 }

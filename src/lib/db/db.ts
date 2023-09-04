@@ -10,7 +10,7 @@ import { RxDBLeaderElectionPlugin } from 'rxdb/plugins/leader-election';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
 import { RxDBMigrationPlugin } from 'rxdb/plugins/migration';
 
-import type { HousingCollection, FieldCollection } from "$lib/types";
+import type { HousingCollection, FieldCollection, CounterCollection } from "$lib/types";
 import { housingSchemaLiteral } from "./schema_housing";
 import { deepMap } from "nanostores";
 import { fieldSchemaLiteral } from "./schema_field";
@@ -20,6 +20,7 @@ import { counterMigrations, fieldMigrations, housingMigrations } from "./migrati
 export type DatabaseCollections = {
   housings: HousingCollection;
   fields: FieldCollection;
+  counters: CounterCollection;
 };
 export type Database = RxDatabase<DatabaseCollections, any, any>;
 

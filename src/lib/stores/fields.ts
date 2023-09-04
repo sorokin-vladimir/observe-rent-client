@@ -8,7 +8,7 @@ import { clearData } from "./utils";
 
 export const fields = deepMap<{_: Map<string, FieldDocType> | null}>({_: null});
 
-export const reinsertFields = action(fields, 'reinsertFields', (store, updatedData) => {
+const reinsertFields = action(fields, 'reinsertFields', (store, updatedData) => {
   // TODO: Add deep comparation to more granular updates
   store.set({_: updatedData});
   return store.get();

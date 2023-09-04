@@ -1,5 +1,5 @@
 import { db } from "$lib/db";
-import type { FieldDocType, HousingDocType } from "$lib/types";
+import type { CounterDocType, FieldDocType, HousingDocType } from "$lib/types";
 import type { RxDocument } from "rxdb";
 import { user } from "./user";
 
@@ -20,7 +20,7 @@ export function _checkOwner(doc: RxDocument<HousingDocType> | RxDocument<FieldDo
   if (doc.createdBy !== userId) throw new Error('User not authorized');
 }
 
-export function clearData<T extends FieldDocType | HousingDocType>(value: T & Record<string, unknown>): T {
+export function clearData<T extends FieldDocType | HousingDocType | CounterDocType>(value: T & Record<string, unknown>): T {
   const { _attachnets, _deleted, _meta, _ref, ...rest } = value;
   const clearedObject = rest;
   for (const key in rest) {

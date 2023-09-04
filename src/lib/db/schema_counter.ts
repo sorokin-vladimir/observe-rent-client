@@ -40,9 +40,19 @@ export const counterSchemaLiteral = {
         unit: {
             type: 'string',
         },
-        value: {
-            type: 'number',
-            minimum: 0,
+        data: {
+            type: 'array',
+            items: {
+                type: 'object',
+                properties: {
+                    month: {
+                        type: 'number',
+                    },
+                    value: {
+                        type: 'number',
+                    },
+                },
+            },
         },
         // Meta fields
         createdAt: {
