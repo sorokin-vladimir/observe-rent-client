@@ -2,21 +2,60 @@ import { computed } from 'nanostores';
 import { fields } from './fields';
 import { counters } from './counters';
 import { currentHousing } from './housing';
-import type { TableDataCell } from '$lib/types';
+import type { CountersStore, FieldsStore, HousingDocType, TableDataCell } from '$lib/types';
+import type { DeepReadonlyArray } from 'rxdb/dist/types/types';
 
-export const tableData = computed([fields, counters], (fields, counters) => {
-  if (!fields._ && !counters._) return [];
+export const tableData = computed([fields, counters, currentHousing], (fields, counters, currentHousing) => {
+  if (!(fields._?.size || counters._?.size)) return [];
 
-  const data: TableDataCell[] = [{ name: 'Field name', type: 'first-col' }];
+  const data: TableDataCell[] = [];
   const sumByMonth = new Map<number, number>();
-  const filledMonths = currentHousing.get()?.filledMonths ?? [];
+  const filledMonths = currentHousing?.filledMonths ?? [];
+  const currency = currentHousing?.currency ?? '';
 
-  // months for fields
-  for (const filledMonth of filledMonths) {
-    data.push({ month: filledMonth, type: 'header' });
+  if (fields._?.size) {
+    data.push({ name: 'Field name', type: 'first-col' });
+    // months for fields
+    fillMonths(data, filledMonths);
+
+    // fields data
+    fillFields(data, { sumByMonth, fields, currency, filledMonths });
+
+    // Sum row
+    data.push({ name: 'Sum', type: 'first-col' });
+    fillSum(data, sumByMonth, filledMonths);
+
+    // row as devider
+    // for first column
+    data.push({ type: 'empty' });
+    fillMonths(data, filledMonths, true);
   }
 
-  // TODO: вынести код циклов для полей и счетчиков в отдельные ф-ции
+  if (counters._?.size) {
+    data.push({ name: 'Counter name', type: 'first-col' });
+    // months for counters
+    fillMonths(data, filledMonths);
+
+    // counters data
+    fillCounters(data, { counters, filledMonths });
+  }
+
+  return data;
+});
+
+function fillMonths(data: TableDataCell[], filledMonths: DeepReadonlyArray<number>, fillEmpty = false) {
+  for (const filledMonth of filledMonths) {
+    data.push(fillEmpty ? { type: 'empty' } : { month: filledMonth, type: 'header' });
+  }
+}
+
+function fillSum(data: TableDataCell[], sumByMonth: Map<number, number>, filledMonths: DeepReadonlyArray<number>) {
+  for (const month of filledMonths) {
+    data.push({value: sumByMonth.get(month)?.toFixed(2) ?? '', type: 'data-common'});
+  }
+}
+
+function fillFields(data: TableDataCell[], { sumByMonth, currency, fields, filledMonths }: FillFieldsProp) {
   for (const field of (fields._ ?? [])) {
     data.push({ name: field[1].name, type: 'first-col', description: field[1].description });
 
@@ -27,6 +66,7 @@ export const tableData = computed([fields, counters], (fields, counters) => {
       map.set(monthlyData.month, {
         amount: monthlyData.amount,
         price: monthlyData.price,
+        currency: currency ?? '',
         month: monthlyData.month,
         fieldId: field[0],
         unit: field[1].unit,
@@ -47,24 +87,9 @@ export const tableData = computed([fields, counters], (fields, counters) => {
       }
     }
   }
+}
 
-  data.push({ name: 'Sum', type: 'first-col' });
-  for (const month of filledMonths) {
-    data.push({value: sumByMonth.get(month)?.toFixed(2) ?? '', type: 'data-common'});
-  }
-
-  for (const _ of filledMonths) {
-    data.push({ type: 'empty' });
-  }
-  // for first column
-  data.push({ type: 'empty' });
-
-  data.push({ name: 'Counter name', type: 'first-col' });
-  // months for counters
-  for (const filledMonth of filledMonths) {
-    data.push({ month: filledMonth, type: 'header' });
-  }
-
+function fillCounters(data: TableDataCell[], { counters, filledMonths } : FillCountersProp) {
   for (const counter of (counters._ ?? [])) {
     data.push({ name: counter[1].name, type: 'first-col', description: counter[1].description });
 
@@ -90,6 +115,16 @@ export const tableData = computed([fields, counters], (fields, counters) => {
       }
     }
   }
+}
 
-  return data;
-});
+type FillFieldsProp = {
+  sumByMonth: Map<number, number>;
+  fields: FieldsStore;
+  currency: HousingDocType['currency'];
+  filledMonths: DeepReadonlyArray<number>;
+};
+
+type FillCountersProp = {
+  counters: CountersStore;
+  filledMonths: DeepReadonlyArray<number>;
+};

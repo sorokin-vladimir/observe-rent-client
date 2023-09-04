@@ -18,3 +18,5 @@ export const counterSchema: RxJsonSchema<CounterDocType> = counterSchemaLiteral;
 export type CounterDocument = RxDocument<CounterDocType>;
 
 export type CounterCollection = RxCollection<CounterDocType>;
+
+export type CountersStore = { _: Map<string, CounterDocType> | null };

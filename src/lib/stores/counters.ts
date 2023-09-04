@@ -1,4 +1,4 @@
-import type { CounterDocType } from "$lib/types";
+import type { CountersStore } from "$lib/types";
 import type { Subscription } from 'rxjs';
 import { action, deepMap, onSet } from "nanostores";
 import { db } from "$lib/db";
@@ -6,7 +6,7 @@ import { clearData } from "./utils";
 import { currentHousing } from "./housing";
 import { getCountersByIds } from "./counter_methods";
 
-export const counters = deepMap<{_: Map<string, CounterDocType> | null}>({_: null});
+export const counters = deepMap<CountersStore>({_: null});
 
 const reinsertCounters = action(counters, 'reinsertCounters', (store, updatedData) => {
   // TODO: Add deep comparation to more granular updates

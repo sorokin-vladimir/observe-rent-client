@@ -1,4 +1,4 @@
-import type { FieldDocType } from "$lib/types";
+import type { FieldsStore } from "$lib/types";
 import { action, deepMap, onSet } from "nanostores";
 import type { Subscription } from 'rxjs';
 import { currentHousing } from "./housing";
@@ -6,7 +6,7 @@ import { getFieldsByIds } from "./field_methods";
 import { db } from "$lib/db";
 import { clearData } from "./utils";
 
-export const fields = deepMap<{_: Map<string, FieldDocType> | null}>({_: null});
+export const fields = deepMap<FieldsStore>({_: null});
 
 const reinsertFields = action(fields, 'reinsertFields', (store, updatedData) => {
   // TODO: Add deep comparation to more granular updates
