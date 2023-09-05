@@ -3,6 +3,8 @@
 	import { timestampToReadableDate } from "$lib/utils";
   import Name from './name.svelte';
   import Header from './header.svelte';
+  import FieldData from './field-data.svelte';
+  import CommonData from './common-data.svelte';
 
   export let name: TableDataCell['name'];
   export let description: TableDataCell['description'];
@@ -17,10 +19,6 @@
   export let type: TableDataCell['type'];
 
   $: className = `cell-wrapper ${type === 'first-col' ? 'first-col' : ''}`;
-  // $: unit = unit ?? '';
-  // $: amount = amount ?? 0;
-  // $: price = price ?? 0;
-  // $: counterValue = counterValue ?? 0;
 </script>
 
 <div class={className}>
@@ -35,11 +33,13 @@
   {:else if type === 'empty'}
     <!-- {''} -->
   {:else if type === 'data-field'}
-    {amount} {unit} x {price} = {(amount ?? 0) * (price ?? 0)}
+    <FieldData {amount} {unit} {price} />
   {:else if type === 'data-counter'}
     {counterValue} {unit}
   {:else if type === 'data-common'}
-    {value}
+    <CommonData>
+      {value}
+    </CommonData>
   {:else}
     ---
   {/if}
@@ -47,7 +47,10 @@
 
 <style lang="scss">
   .cell-wrapper {
-    padding: 1rem;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0.5rem 1rem;
     box-sizing: border-box;
     border-bottom: 1px solid darkgray;
     background-color: var(--y-body-bg);
@@ -55,5 +58,6 @@
   .first-col {
     position: sticky;
     left: 0;
+    z-index: 1;
   }
 </style>

@@ -4,7 +4,7 @@
   import AddCounterForm from "./forms/add_counter_form.svelte";
   import AddMonthlyData from './forms/add_month_modal.svelte';
 	import { createField } from "$lib/stores/field_methods";
-	import { currentHousing, currentHousingId, fields, tableData } from "$lib/stores";
+	import { counters, currentHousing, currentHousingId, fields, tableData } from "$lib/stores";
   import { Cell } from './cell';
 	import { createCounter } from "$lib/stores/counter_methods";
 	import { onMount } from "svelte";
@@ -61,26 +61,31 @@
     showAddCounterPopover = !showAddCounterPopover;
   }
 
-  $: document.documentElement.style.setProperty('--table-rows', ($fields._?.size ?? 0).toString());
+  $: {
+    const fieldsCount = $fields._?.size ? $fields._?.size + 1 : 0;
+    const countersCount = $counters._?.size ? $counters._?.size + 1 : 0;
+    const rowsCount = fieldsCount && countersCount ? fieldsCount + countersCount + 1 : (fieldsCount || countersCount);
+    document.documentElement.style.setProperty('--table-rows', rowsCount.toString());
+  }
   $: document.documentElement.style.setProperty('--table-columns', (($currentHousing?.filledMonths ?? []).length).toString());
 </script>
 
 <div>
   <div class="table" bind:this={tableEl}>
     {#if $fields._?.size}
-      {#each $tableData as data}
+      {#each $tableData as { name, fieldId, month, amount, price, counterId, value, counterValue, unit, type, description }}
         <Cell
-          name={data.name}
-          fieldId={data.fieldId}
-          month={data.month}
-          amount={data.amount}
-          price={data.price}
-          counterId={data.counterId}
-          value={data.value}
-          counterValue={data.counterValue}
-          unit={data.unit}
-          type={data.type}
-          description={data.description}
+          {name}
+          {fieldId}
+          {month}
+          {amount}
+          {price}
+          {counterId}
+          {value}
+          {counterValue}
+          {unit}
+          {type}
+          {description}
         />
       {/each}
     {:else}
@@ -116,9 +121,8 @@
 <style lang="scss">
   .table {
     display: grid;
-    grid-template-columns: repeat(calc(var(--table-columns) + 1), 200px);
-    grid-template-rows: repeat(calc(var(--table-rows) + 1), 50px);
-    // row-gap: 1rem;
+    grid-template-columns: 13rem repeat(var(--table-columns), minmax(11rem, 1fr));
+    grid-template-rows: repeat(var(--table-rows), 1fr);
     overflow-x: auto;
     position: relative;
   }

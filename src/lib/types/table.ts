@@ -23,15 +23,15 @@ export type TableDataCell = {
   value?: undefined;
   type: 'header';
 } | {
-  name?:undefined;
-  description?:undefined;
-  fieldId?:undefined;
-  amount?:undefined;
-  price?:undefined;
-  counterId?:undefined;
-  counterValue?:undefined;
-  unit?:undefined;
-  month?:undefined;
+  name?: undefined;
+  description?: undefined;
+  fieldId?: undefined;
+  amount?: undefined;
+  price?: undefined;
+  counterId?: undefined;
+  counterValue?: undefined;
+  unit?: undefined;
+  month?: undefined;
   value?: undefined;
   type: 'empty';
 } | {
@@ -71,16 +71,3 @@ export type TableDataCell = {
   value: number | string;
   type: 'data-common';
 };
-
-/* {
-  name?: string;
-  description?: string;
-  fieldId?: string | null;
-  amount?: number;
-  price?: number;
-  counterId?: string | null;
-  counterValue?: number;
-  unit?: string;
-  month?: number;
-  type: 'first-col' | 'header' | 'devider' | 'data-field' | 'data-counter';
-} */

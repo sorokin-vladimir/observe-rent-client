@@ -34,6 +34,7 @@ export const housingSchemaLiteral = {
         },
         currency: {
             type: 'string',
+            default: 'EUR',
         },
         address: {
             type: 'string',

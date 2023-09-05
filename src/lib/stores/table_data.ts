@@ -2,7 +2,7 @@ import { computed } from 'nanostores';
 import { fields } from './fields';
 import { counters } from './counters';
 import { currentHousing } from './housing';
-import type { CountersStore, FieldsStore, HousingDocType, TableDataCell } from '$lib/types';
+import type { CountersStore, FieldsStore, TableDataCell } from '$lib/types';
 import type { DeepReadonlyArray } from 'rxdb/dist/types/types';
 
 export const tableData = computed([fields, counters, currentHousing], (fields, counters, currentHousing) => {
@@ -11,7 +11,6 @@ export const tableData = computed([fields, counters, currentHousing], (fields, c
   const data: TableDataCell[] = [];
   const sumByMonth = new Map<number, number>();
   const filledMonths = currentHousing?.filledMonths ?? [];
-  const currency = currentHousing?.currency ?? '';
 
   if (fields._?.size) {
     data.push({ name: 'Field name', type: 'first-col' });
@@ -19,12 +18,14 @@ export const tableData = computed([fields, counters, currentHousing], (fields, c
     fillMonths(data, filledMonths);
 
     // fields data
-    fillFields(data, { sumByMonth, fields, currency, filledMonths });
+    fillFields(data, { sumByMonth, fields, filledMonths });
 
     // Sum row
     data.push({ name: 'Sum', type: 'first-col' });
     fillSum(data, sumByMonth, filledMonths);
+  }
 
+  if (fields._?.size && counters._?.size) {
     // row as devider
     // for first column
     data.push({ type: 'empty' });
@@ -55,7 +56,7 @@ function fillSum(data: TableDataCell[], sumByMonth: Map<number, number>, filledM
   }
 }
 
-function fillFields(data: TableDataCell[], { sumByMonth, currency, fields, filledMonths }: FillFieldsProp) {
+function fillFields(data: TableDataCell[], { sumByMonth, fields, filledMonths }: FillFieldsProp) {
   for (const field of (fields._ ?? [])) {
     data.push({ name: field[1].name, type: 'first-col', description: field[1].description });
 
@@ -66,7 +67,6 @@ function fillFields(data: TableDataCell[], { sumByMonth, currency, fields, fille
       map.set(monthlyData.month, {
         amount: monthlyData.amount,
         price: monthlyData.price,
-        currency: currency ?? '',
         month: monthlyData.month,
         fieldId: field[0],
         unit: field[1].unit,
@@ -120,7 +120,6 @@ function fillCounters(data: TableDataCell[], { counters, filledMonths } : FillCo
 type FillFieldsProp = {
   sumByMonth: Map<number, number>;
   fields: FieldsStore;
-  currency: HousingDocType['currency'];
   filledMonths: DeepReadonlyArray<number>;
 };
 

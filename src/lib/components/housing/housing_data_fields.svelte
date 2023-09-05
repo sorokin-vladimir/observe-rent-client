@@ -2,11 +2,12 @@
   import { currentHousing } from '$lib/stores';
 	import { updateHousing } from '$lib/stores/housing_methods';
 	import type { HousingDocType } from '$lib/types';
-	import { Button, Input, Label } from 'yesvelte';
+	import { Button, Input, Label, Select } from 'yesvelte';
 
   async function handleSave() {
     const updatedData: Partial<HousingDocType> = {};
     if (name && name !== $currentHousing?.name) updatedData.name = name;
+    if (currency && currency !== $currentHousing?.currency) updatedData.currency = currency;
     if (area && area !== $currentHousing?.area) updatedData.area = area;
     if (livingArea && livingArea !== $currentHousing?.livingArea) updatedData.livingArea = livingArea;
     if (address && address !== $currentHousing?.address) updatedData.address = address;
@@ -23,14 +24,18 @@
 
   let isReadonly = true;
   let props: { disabled?: boolean } = {};
+  const currency_items = ['EUR', 'USD'];
 
   let name: HousingDocType['name'];
+  let currency: HousingDocType['currency'] = currency_items[0];
   let area: HousingDocType['area'];
   let livingArea: HousingDocType['livingArea'];
   let address: HousingDocType['address'];
 
+
   function reassignValues() {
     name = $currentHousing?.name ?? '';
+    currency = $currentHousing?.currency ?? currency_items[0];
     area = $currentHousing?.area;
     livingArea = $currentHousing?.livingArea;
     address = $currentHousing?.address;
@@ -44,6 +49,8 @@
   <div class="fields-wrapper">
     <Label mb="0" for="housing_name">Name</Label>
     <Input id="housing_name" bind:value={name} { ...props } />
+    <Label mb="0" for="housing_currency">Currency</Label>
+    <Select id="housing_currency" bind:value={currency} items={currency_items} { ...props } />
     <Label mb="0" for="housing_area">Area</Label>
     <Input id="housing_area" type="number" bind:value={area} { ...props } />
     <Label mb="0" for="housing_living_area">Living area</Label>
