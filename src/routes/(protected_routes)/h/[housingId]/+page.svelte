@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { currentHousingId } from '$lib/stores';
-	import { deleteHousing } from '$lib/stores/housing_methods';
+	import { deleteHousing } from '$lib/stores';
 	import { onDestroy, onMount } from 'svelte';
 	import { Button } from 'yesvelte';
   import { HousingDataFields, Table } from '$lib/components';

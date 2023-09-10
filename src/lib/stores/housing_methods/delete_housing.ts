@@ -1,7 +1,7 @@
 import { db } from "$lib/db";
 import { _getHousingById, _checkOwner } from "../utils";
 
-export async function deleteHousing(housingId: string) {
+export async function _deleteHousing(housingId: string) {
   const doc = await _getHousingById(housingId).exec();
   _checkOwner(doc);
 

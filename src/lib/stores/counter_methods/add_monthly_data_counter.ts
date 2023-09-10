@@ -1,7 +1,7 @@
 import { db } from "$lib/db";
 import type { ArrayElement, CounterDocType } from "$lib/types";
 import { getUTCTimestamp } from "$lib/utils";
-import { pushFilledMonthHousing } from "../housing_methods/update_filledMonths";
+import { updateFilledMonths } from "../housing";
 import { _checkOwner, _getHousingById } from "../utils";
 
 type MonthlyCounterArrayElement = ArrayElement<CounterDocType['data']>;
@@ -60,7 +60,7 @@ export async function addMonthlyDataCounter(month: MonthlyCounterArrayElement['m
   }
 
   // update housing with filled months
-  await pushFilledMonthHousing(housingDoc, month);
+  await updateFilledMonths('push', housingDoc, month);
 
   return true;
 }

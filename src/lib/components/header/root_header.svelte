@@ -1,12 +1,14 @@
 <script lang="ts">
   import { Button, Icon, Avatar, Popover, PopoverBody } from 'yesvelte';
   import AddHousingForm from './add_housing_form.svelte';
-	import { createHousing } from '$lib/stores/housing_methods';
+	import { createHousing } from '$lib/stores';
 	import { goto } from '$app/navigation';
   import Header from './header.svelte';
 
   async function addHousing(event: CustomEvent<{ name: string; }>) {
     const h = await createHousing({ name: event.detail.name });
+    if (!h) return;
+
     await goto(`/h/${h.id}`);
 	}
 </script>

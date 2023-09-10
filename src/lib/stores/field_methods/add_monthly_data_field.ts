@@ -1,7 +1,7 @@
 import { db } from "$lib/db";
 import type { ArrayElement, FieldDocType } from "$lib/types";
 import { getUTCTimestamp } from "$lib/utils";
-import { pushFilledMonthHousing } from "../housing_methods/update_filledMonths";
+import { updateFilledMonths } from "../housing";
 import { _checkOwner, _getHousingById } from "../utils";
 
 type MonthlyFieldArrayElement = ArrayElement<FieldDocType['data']>;
@@ -65,7 +65,7 @@ export async function addMonthlyDataField(month: MonthlyFieldArrayElement['month
   }
 
   // update housing with filled months
-  await pushFilledMonthHousing(housingDoc, month);
+  await updateFilledMonths('push', housingDoc, month);
 
   return true;
 }

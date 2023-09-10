@@ -1,6 +1,6 @@
 <script lang="ts">
   import { currentHousing } from '$lib/stores';
-	import { updateHousing } from '$lib/stores/housing_methods';
+	import { updateHousing } from '$lib/stores';
 	import type { HousingDocType } from '$lib/types';
 	import { Button, Input, Label, Select } from 'yesvelte';
 
@@ -15,10 +15,8 @@
     if (!$currentHousing?.id) return;
     const result = await updateHousing($currentHousing.id, updatedData);
 
-    if (!result) {
-      // TODO: show error
-      return;
-    }
+    if (!result) return;
+
     isReadonly = true;
   }
 

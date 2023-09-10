@@ -3,12 +3,12 @@ import type { HousingDocType } from "$lib/types";
 import { getUTCTimestamp, getUid, sanitizeFlatObj } from "$lib/utils";
 import { _getUserId } from "../utils";
 
-type NewHousing = Partial<Omit<
+export type NewHousing = Partial<Omit<
   HousingDocType,
   'name' | 'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'fields'
 >> & Pick<HousingDocType, 'name'>;
 
-export async function createHousing(housing: NewHousing) {
+export async function _createHousing(housing: NewHousing) {
   const userId = _getUserId();
 
   const id = await getUid();
