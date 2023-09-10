@@ -1,16 +1,17 @@
 import { db } from "$lib/db";
 import type { ArrayElement, FieldDocType } from "$lib/types";
 import { getUTCTimestamp } from "$lib/utils";
+import { pushFilledMonthHousing } from "../housing_methods/update_filledMonths";
 import { _checkOwner, _getHousingById } from "../utils";
 
-type MonthlyArrayElement = ArrayElement<FieldDocType['data']>;
-type MonthlyData = {
-  amount?: MonthlyArrayElement['amount'];
-  price?: MonthlyArrayElement['price'];
+type MonthlyFieldArrayElement = ArrayElement<FieldDocType['data']>;
+type MonthlyDataField = {
+  amount?: MonthlyFieldArrayElement['amount'];
+  price?: MonthlyFieldArrayElement['price'];
   fieldId: string;
 };
 
-export async function addMonthlyData(month: MonthlyArrayElement['month'], data: MonthlyData[]) {
+export async function addMonthlyDataField(month: MonthlyFieldArrayElement['month'], data: MonthlyDataField[]) {
   if (!month) throw new Error('Month is required');
   if (!data.length) throw new Error('Data is required');
 
@@ -28,7 +29,7 @@ export async function addMonthlyData(month: MonthlyArrayElement['month'], data: 
   const housing = housingDoc.toJSON();
 
   // check if housing already has current monthly data
-  if (housing?.filledMonths?.includes(month)) throw new Error('Housing already has monthly data');
+  // if (housing?.filledMonths?.includes(month)) throw new Error('Housing already has monthly data');
 
   // check each field for owner and related housing
   for (const field of fieldsDoc) {
@@ -48,6 +49,7 @@ export async function addMonthlyData(month: MonthlyArrayElement['month'], data: 
       typeof dataToPush.price !== 'number' ||
       Number.isNaN(dataToPush.price)
     ) continue;
+
     await field[1].update({
       $push: {
         data: {
@@ -63,14 +65,7 @@ export async function addMonthlyData(month: MonthlyArrayElement['month'], data: 
   }
 
   // update housing with filled months
-  const filledMonths = (housing.filledMonths ?? []).slice();
-  filledMonths.push(month);
-  filledMonths.sort();
-  await housingDoc?.update({
-    $set: {
-      filledMonths,
-    }
-  });
+  await pushFilledMonthHousing(housingDoc, month);
 
   return true;
 }
