@@ -1,12 +1,13 @@
 import { action, map } from "nanostores";
 import type { NotificationsContext, UI } from "$lib/types";
 import type { getNotificationsContext } from "svelte-notifications";
+import { getErrorText } from "$lib/utils";
 
 export const ui = map<UI>({
   isFullscreenLoading: true,
   pushNotification: ({ text, type, removeAfter }) => {
     _notificationsContext.get().addNotification?.({
-      text,
+      text: type === 'error' ? getErrorText(text) : text,
       position: 'bottom-left',
       type,
       removeAfter: removeAfter ?? 7000,

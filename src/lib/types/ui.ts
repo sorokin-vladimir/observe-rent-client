@@ -1,8 +1,19 @@
+import type { RentError } from '$lib/utils';
 import type { getNotificationsContext } from 'svelte-notifications';
+
+type PushNotificationArgs = (
+    | {
+      text: string;
+      type?: 'success' | 'warning' | undefined;
+    } | {
+      text: Error | RentError;
+      type?: 'error';
+    }
+  ) & { removeAfter?: number; };
 
 export type UI = {
   isFullscreenLoading: boolean;
-  pushNotification: ({ text, type, removeAfter }: { text: string; type?: 'success' | 'warning' | 'error' | undefined; removeAfter?: number; }) => void;
+  pushNotification: ({ text, type, removeAfter }: PushNotificationArgs) => void;
 }
 
 export type NotificationsContext = {
