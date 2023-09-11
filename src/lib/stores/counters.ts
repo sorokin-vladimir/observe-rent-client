@@ -4,7 +4,7 @@ import { action, deepMap, onSet } from "nanostores";
 import { db } from "$lib/db";
 import { clearData } from "./utils";
 import { currentHousing } from "./housing";
-import { getCountersByIds } from "./counter_methods";
+import { _getCountersByIds } from "./counter_methods";
 
 export const counters = deepMap<CountersStore>({_: null});
 
@@ -52,7 +52,7 @@ let sub: Subscription | undefined;
 onSet(currentHousing, async ({ newValue }) => {
   if (newValue?.id) {
     const countersId = newValue.counters?.concat() ?? [];
-    const counters = await getCountersByIds(countersId);
+    const counters = await _getCountersByIds(countersId);
     reinsertCounters(counters);
     sub = _subscriber();
   } else {

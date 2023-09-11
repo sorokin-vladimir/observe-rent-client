@@ -1,6 +1,6 @@
 import { db } from "$lib/db";
 import type { HousingDocType } from "$lib/types";
-import { getUTCTimestamp, getUid, sanitizeFlatObj } from "$lib/utils";
+import { RentError, getUTCTimestamp, getUid, sanitizeFlatObj } from "$lib/utils";
 import { _getUserId } from "../utils";
 
 export type NewHousing = Partial<Omit<
@@ -15,7 +15,7 @@ export async function _createHousing(housing: NewHousing) {
   const currentTime = getUTCTimestamp();
 
   const sanitizedNewFields: Partial<HousingDocType> = sanitizeFlatObj(housing);
-  if (!sanitizedNewFields.name) throw new Error('Housing name is required');
+  if (!sanitizedNewFields.name) throw new RentError('HOUSING_NAME_REQUIRED');
 
   const newHousing: HousingDocType = {
     ...sanitizedNewFields,

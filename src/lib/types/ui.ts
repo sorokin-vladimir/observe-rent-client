@@ -6,7 +6,7 @@ type PushNotificationArgs = (
       text: string;
       type?: 'success' | 'warning' | undefined;
     } | {
-      text: Error | RentError;
+      text: RentError | Error;
       type?: 'error';
     }
   ) & { removeAfter?: number; };

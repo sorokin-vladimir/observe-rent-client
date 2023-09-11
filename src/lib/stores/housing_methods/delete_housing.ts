@@ -1,4 +1,5 @@
 import { db } from "$lib/db";
+import { RentError } from "$lib/utils";
 import { _getHousingById, _checkOwner } from "../utils";
 
 export async function _deleteHousing(housingId: string) {
@@ -8,12 +9,12 @@ export async function _deleteHousing(housingId: string) {
   const fieldsToRemove = doc?.fields ?? [];
   if (fieldsToRemove.length) {
     const result = await db.get()._.collections.fields.bulkRemove(fieldsToRemove);
-    if (result.error) throw new Error('Error while removing fields');
+    if (result.error) throw new RentError('FIELD_REMOVING')
   }
   const countersToRemove = doc?.counters ?? [];
   if (countersToRemove.length) {
     const result = await db.get()._.collections.counters.bulkRemove(countersToRemove);
-    if (result.error) throw new Error('Error while removing counters');
+    if (result.error) throw new RentError('COUNTER_REMOVING');
   }
 
   await doc?.remove();

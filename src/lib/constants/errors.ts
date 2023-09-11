@@ -9,6 +9,15 @@ export const errorsMap = {
   HOUSING_NOT_FOUND: 'Housing is not found',
   HOUSINGID_INVALID_FORMAT: 'HousingID has invalid format',
 
+  /** System */
+  DB_NOT_DEFINED: 'DB is not defined',
+  HOUSING_DOC_NOT_DOC: 'housingDoc is not an RxDocument',
+  FIELD_REMOVING: 'Unexpected error while removing linked fields',
+  COUNTER_REMOVING: 'Unexpected error while removing linked counters',
+
+  /** Create Housing */
+  HOUSING_NAME_REQUIRED: 'Housing name is required',
+
   /** Add monthly data field/counter */
   MONTH_REQUIRED: 'Month is required for this action',
   DATA_REQUIRED: 'Data is required for this action',

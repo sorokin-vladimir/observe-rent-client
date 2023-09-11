@@ -4,6 +4,7 @@ import { deepMap, onSet } from "nanostores";
 import { updateHousings } from "./housing";
 import type { Subscription } from 'rxjs';
 import { setFullscreenLoader } from "./ui";
+import { RentError } from "$lib/utils";
 
 export const user = deepMap<User | Record<string, never>>({});
 
@@ -14,7 +15,7 @@ onSet(user, async ({ newValue }) => {
     const _db = await getDB('test_name', newValue.pwd);
 
     /** Set the DB in a store to easy access */
-    if (!_db) throw new Error('DB is not defined');
+    if (!_db) throw new RentError('DB_NOT_DEFINED');
     db.set({ _: _db });
 
     /** Subscribe to updates */
