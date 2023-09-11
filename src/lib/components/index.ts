@@ -6,3 +6,4 @@ export { default as HousingsList } from './housings/housings_list.svelte';
 export { default as HousingCard } from './housing_card/housing_card.svelte';
 export { default as HousingDataFields } from './housing/housing_data_fields.svelte';
 export { default as Table } from './table/table.svelte';
+export { default as System } from './system/system.svelte';

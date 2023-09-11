@@ -1,12 +1,13 @@
 <script lang="ts">
+  import Notifications from 'svelte-notifications';
   import tabler from 'yesvelte/css/tabler.min.css?url'
   import { onMount } from 'svelte';
-  import type { Subscription } from 'rxjs';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
 	import { isValidPath } from '$lib/utils';
 	import { ui, user } from '$lib/stores';
 	import { Spinner } from 'yesvelte';
+  import { System } from '$lib/components';
 
   let isAuth = true;
 
@@ -30,7 +31,6 @@
     }
   }
 
-
   onMount(async () => {
     await redirect();
   });
@@ -42,22 +42,25 @@
   <link rel='stylesheet' href={tabler}/>
 </svelte:head>
 
-<div class="app">
-  <div class="app-wrapper">
-    {#if $ui.isFullscreenLoading}
-      <div class="spinner-wrapper">
-        <Spinner size="lg" color="primary" />
-      </div>
-    {:else}
-      <slot />
-    {/if}
-    <button class="button" on:click={() => {
-      // TODO: remove button
-      isAuth = !isAuth;
-      redirect();
-    }}>{#if isAuth}Logout{:else}Login{/if}</button>
+<Notifications>
+  <div class="app">
+    <div class="app-wrapper">
+      {#if $ui.isFullscreenLoading}
+        <div class="spinner-wrapper">
+          <Spinner size="lg" color="primary" />
+        </div>
+      {:else}
+        <slot />
+      {/if}
+      <button class="button" on:click={() => {
+        // TODO: remove button
+        isAuth = !isAuth;
+        redirect();
+      }}>{#if isAuth}Logout{:else}Login{/if}</button>
+    </div>
   </div>
-</div>
+  <System />
+</Notifications>
 
 <style lang="scss">
   :root {
