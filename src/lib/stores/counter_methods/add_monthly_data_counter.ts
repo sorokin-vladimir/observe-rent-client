@@ -1,6 +1,6 @@
 import { db } from "$lib/db";
 import type { ArrayElement, CounterDocType } from "$lib/types";
-import { getUTCTimestamp } from "$lib/utils";
+import { RentError, getUTCTimestamp } from "$lib/utils";
 import { updateFilledMonths } from "../housing";
 import { _checkOwner, _getHousingById } from "../utils";
 
@@ -11,8 +11,8 @@ type MonthlyData = {
 };
 
 export async function addMonthlyDataCounter(month: MonthlyCounterArrayElement['month'], data: MonthlyData[]) {
-  if (!month) throw new Error('Month is required');
-  if (!data.length) throw new Error('Data is required');
+  if (!month) throw new RentError('MONTH_REQUIRED');
+  if (!data.length) throw new RentError('DATA_REQUIRED');
 
   const currentTime = getUTCTimestamp();
 
@@ -22,21 +22,17 @@ export async function addMonthlyDataCounter(month: MonthlyCounterArrayElement['m
 
   // get housing from db
   const housingId = countersDoc.get(data[0].counterId)?.housingId;
-  if (!housingId) throw new Error('housingId not found');
+  if (!housingId) throw new RentError('HOUSINGID_NOT_FOUND')
   const housingDoc = await _getHousingById(housingId)?.exec();
-  if (!housingDoc) throw new Error('Housing not found');
-  const housing = housingDoc.toJSON();
-
-  // check if housing already has current monthly data
-  // if (housing?.filledMonths?.includes(month)) throw new Error('Housing already has monthly data');
+  if (!housingDoc) throw new RentError('HOUSING_NOT_FOUND');
 
   // check each counter for owner and related housing
   for (const counter of countersDoc) {
     _checkOwner(counter[1]);
-    if (counter[1].housingId !== housingId) throw new Error('Counter is not related to housing');
+    if (counter[1].housingId !== housingId) throw new RentError('COUNTER_NOT_RELATED_TO_HOUSING');
 
     const isCounterAlreadyHasMonthlyData = counter[1].data?.some(({ month: counterMonth }) => counterMonth === month);
-    if (isCounterAlreadyHasMonthlyData) throw new Error('Counter already has monthly data');
+    if (isCounterAlreadyHasMonthlyData) throw new RentError('COUNTER_ALREADY_HAS_DATA');
 
     // update counter with monthly data
     const dataToPush = data.find(({ counterId }) => counterId === counter[0]);

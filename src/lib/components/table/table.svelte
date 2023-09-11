@@ -3,7 +3,7 @@
   import AddFieldForm from "./forms/add_field_form.svelte";
   import AddCounterForm from "./forms/add_counter_form.svelte";
   import { AddMonthlyData } from './forms/add_monthly_data';
-	import { createField } from "$lib/stores/field_methods";
+	import { createField } from "$lib/stores";
 	import { counters, currentHousing, currentHousingId, fields, tableData } from "$lib/stores";
   import { Cell } from './cell';
 	import { createCounter } from "$lib/stores/counter_methods";

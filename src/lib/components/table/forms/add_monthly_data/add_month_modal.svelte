@@ -2,7 +2,7 @@
   import { createEventDispatcher, onMount } from "svelte";
 	import { Button, DatePicker, Input, Label, Modal, ModalBody, ModalFooter } from "yesvelte";
   import { fields, counters } from "$lib/stores";
-	import { addMonthlyDataField } from "$lib/stores/field_methods";
+	import { addMonthlyDataField } from "$lib/stores";
 	import { getTimestampForMonthlyData } from "$lib/utils";
 	import FieldBlock from "./field_block.svelte";
   import CounterBlock from "./counter_block.svelte";
@@ -67,14 +67,11 @@
     }
 
     if (Object.keys(fieldDataToSave).length) {
-      const resultFields = await addMonthlyDataField(getTimestampForMonthlyData(date), fieldDataToSave);
-      // // TODO: show error
-      if (!resultFields) console.error(`Error saving fields`);
+      await addMonthlyDataField(getTimestampForMonthlyData(date), fieldDataToSave);
     }
 
     if (Object.keys(counterDataToSave).length) {
-      const resultCounters = await addMonthlyDataCounter(getTimestampForMonthlyData(date), counterDataToSave);
-      if (!resultCounters) console.error(`Error saving counters`);
+      await addMonthlyDataCounter(getTimestampForMonthlyData(date), counterDataToSave);
     }
 
     onClose();

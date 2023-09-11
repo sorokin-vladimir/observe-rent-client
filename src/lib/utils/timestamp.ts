@@ -28,7 +28,7 @@ export function getTimestampForMonthlyData(localTime?: Date | string) {
   );
 }
 
-export function timestampToReadableDate(timestamp: number) {
+export function timestampToReadableDate(timestamp: number, monthFormat: 'short' | 'long' = 'short') {
   const date = new Date(timestamp);
-  return date.toLocaleDateString('en-UK', {month: 'short', year: 'numeric'});
+  return date.toLocaleDateString('en-UK', {month: monthFormat, year: 'numeric'});
 }

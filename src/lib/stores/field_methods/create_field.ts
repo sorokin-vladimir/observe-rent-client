@@ -1,27 +1,27 @@
 import type { FieldDocType } from "$lib/types";
-import { getUTCTimestamp, getUid, isValidId, sanitizeFlatObj } from "$lib/utils";
+import { RentError, getUTCTimestamp, getUid, isValidId, sanitizeFlatObj } from "$lib/utils";
 import { db } from "$lib/db";
 import { _getHousingById, _getUserId } from "../utils";
 
 
-type NewField = Partial<Omit<
+export type NewField = Partial<Omit<
   FieldDocType, 'name' | 'housingId' | 'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'ordering'
 >> & Pick<FieldDocType, 'name' | 'housingId'>;
 
-export async function createField(field: NewField) {
+export async function _createField(field: NewField) {
   const userId = _getUserId();
 
   const id = await getUid();
   const currentTime = getUTCTimestamp();
 
-  if (!isValidId(field.housingId)) throw new Error("Invalid format: housingId");
+  if (!isValidId(field.housingId)) throw new RentError('HOUSINGID_INVALID_FORMAT');
   const housingDoc = await _getHousingById(field.housingId)?.exec();
-  if (!housingDoc) throw new Error("Housing not found");
+  if (!housingDoc) throw new RentError('HOUSING_NOT_FOUND');
   const fieldsCount = housingDoc.fields?.length ?? 0;
 
   const sanitizedNewFields: Partial<FieldDocType> = sanitizeFlatObj(field);
-  if (!sanitizedNewFields.name) throw new Error('Field name is required');
-  if (!sanitizedNewFields.housingId) throw new Error('Field housingId is required');
+  if (!sanitizedNewFields.name) throw new RentError('FIELD_NAME_REQUIRED');
+  if (!sanitizedNewFields.housingId) throw new RentError('HOUSINGID_REQUIRED');
 
   const newField: FieldDocType = {
     ...sanitizedNewFields,

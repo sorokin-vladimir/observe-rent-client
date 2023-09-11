@@ -1,19 +1,20 @@
 import { db } from "$lib/db";
 import type { ArrayElement, FieldDocType } from "$lib/types";
-import { getUTCTimestamp } from "$lib/utils";
+import { RentError, getUTCTimestamp } from "$lib/utils";
 import { updateFilledMonths } from "../housing";
 import { _checkOwner, _getHousingById } from "../utils";
 
 type MonthlyFieldArrayElement = ArrayElement<FieldDocType['data']>;
-type MonthlyDataField = {
+export type MonthProp = NonNullable<MonthlyFieldArrayElement['month']>;
+export type MonthlyDataField = {
   amount?: MonthlyFieldArrayElement['amount'];
   price?: MonthlyFieldArrayElement['price'];
   fieldId: string;
 };
 
-export async function addMonthlyDataField(month: MonthlyFieldArrayElement['month'], data: MonthlyDataField[]) {
-  if (!month) throw new Error('Month is required');
-  if (!data.length) throw new Error('Data is required');
+export async function _addMonthlyDataField(month: MonthProp, data: MonthlyDataField[]) {
+  if (!month) throw new RentError('MONTH_REQUIRED');
+  if (!data.length) throw new RentError('DATA_REQUIRED');
 
   const currentTime = getUTCTimestamp();
 
@@ -23,21 +24,17 @@ export async function addMonthlyDataField(month: MonthlyFieldArrayElement['month
 
   // get housing from db
   const housingId = fieldsDoc.get(data[0].fieldId)?.housingId;
-  if (!housingId) throw new Error('housingId not found');
+  if (!housingId) throw new RentError('HOUSINGID_NOT_FOUND');
   const housingDoc = await _getHousingById(housingId)?.exec();
-  if (!housingDoc) throw new Error('Housing not found');
-  const housing = housingDoc.toJSON();
-
-  // check if housing already has current monthly data
-  // if (housing?.filledMonths?.includes(month)) throw new Error('Housing already has monthly data');
+  if (!housingDoc) throw new RentError('HOUSING_NOT_FOUND');
 
   // check each field for owner and related housing
   for (const field of fieldsDoc) {
     _checkOwner(field[1]);
-    if (field[1].housingId !== housingId) throw new Error('Field is not related to housing');
+    if (field[1].housingId !== housingId) throw new RentError('FIELD_NOT_RELATED_TO_HOUSING');
 
     const isFieldAlreadyHasMonthlyData = field[1].data?.some(({ month: fieldMonth }) => fieldMonth === month);
-    if (isFieldAlreadyHasMonthlyData) throw new Error('Field already has monthly data');
+    if (isFieldAlreadyHasMonthlyData) throw new RentError('FIELD_ALREADY_HAS_DATA');
 
     // update field with monthly data
     const dataToPush = data.find(({ fieldId }) => fieldId === field[0]);

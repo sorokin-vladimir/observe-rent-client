@@ -2,9 +2,17 @@ import type { FieldsStore } from "$lib/types";
 import { action, deepMap, onSet } from "nanostores";
 import type { Subscription } from 'rxjs';
 import { currentHousing } from "./housing";
-import { getFieldsByIds } from "./field_methods";
+import {
+  _addMonthlyDataField,
+  _createField,
+  _getFieldsByIds,
+  type MonthlyDataField,
+  type MonthProp,
+  type NewField } from "./field_methods";
 import { db } from "$lib/db";
 import { clearData } from "./utils";
+import { ui } from "./ui";
+import { RentError, timestampToReadableDate } from "$lib/utils";
 
 export const fields = deepMap<FieldsStore>({_: null});
 
@@ -52,7 +60,7 @@ let sub: Subscription | undefined;
 onSet(currentHousing, async ({ newValue }) => {
   if (newValue?.id) {
     const fieldsId = newValue.fields?.concat() ?? [];
-    const fields = await getFieldsByIds(fieldsId);
+    const fields = await _getFieldsByIds(fieldsId);
     reinsertFields(fields);
     sub = _subscriber();
   } else {
@@ -60,3 +68,39 @@ onSet(currentHousing, async ({ newValue }) => {
     sub?.unsubscribe();
   }
 });
+
+export async function addMonthlyDataField(month: MonthProp, data: MonthlyDataField[]) {
+  try {
+    const result = await _addMonthlyDataField(month, data);
+    if (result) {
+      ui.get().pushNotification({
+        text: `Fields' data for ${timestampToReadableDate(month, 'long')} was successfully added`,
+      })
+    }
+    return result;
+  } catch (error) {
+    ui.get().pushNotification({
+      text: error as RentError,
+      type: 'error',
+    });
+    console.error(error);
+  }
+}
+
+export async function createField(field: NewField) {
+  try {
+    const result = await _createField(field);
+    if (result.id) {
+      ui.get().pushNotification({
+        text: `Field "${result.name}" was successfully added`,
+      })
+    }
+    return result;
+  } catch (error) {
+    ui.get().pushNotification({
+      text: error as RentError,
+      type: 'error',
+    });
+    console.error(error);
+  }
+}
