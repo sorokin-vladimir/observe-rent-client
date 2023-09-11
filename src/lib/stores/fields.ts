@@ -75,7 +75,7 @@ export async function addMonthlyDataField(month: MonthProp, data: MonthlyDataFie
     if (result) {
       ui.get().pushNotification({
         text: `Fields' data for ${timestampToReadableDate(month, 'long')} was successfully added`,
-      })
+      });
     }
     return result;
   } catch (error) {
@@ -93,7 +93,7 @@ export async function createField(field: NewField) {
     if (result.id) {
       ui.get().pushNotification({
         text: `Field "${result.name}" was successfully added`,
-      })
+      });
     }
     return result;
   } catch (error) {
