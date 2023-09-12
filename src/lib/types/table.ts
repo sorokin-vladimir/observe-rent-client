@@ -1,10 +1,10 @@
 export type TableDataCell = {
   name: string;
   description?: string;
-  fieldId?: undefined;
+  fieldId?: string;
   amount?: undefined;
   price?: undefined;
-  counterId?: undefined;
+  counterId?: string;
   counterValue?: undefined;
   unit?: undefined;
   month?: undefined;

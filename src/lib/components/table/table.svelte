@@ -126,8 +126,4 @@
     overflow-x: auto;
     position: relative;
   }
-  .first-col {
-    position: sticky;
-    left: 0;
-  }
 </style>

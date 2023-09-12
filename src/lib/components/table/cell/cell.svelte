@@ -23,11 +23,11 @@
 
 <div class={className}>
   {#if type === 'first-col'}
-    <Name {description}>
+    <Name {description} {fieldId} {counterId}>
       {name}
     </Name>
   {:else if type === 'header' && month}
-    <Header>
+    <Header timestamp={month}>
       {timestampToReadableDate(month)}
     </Header>
   {:else if type === 'empty'}

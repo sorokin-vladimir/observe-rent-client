@@ -58,7 +58,12 @@ function fillSum(data: TableDataCell[], sumByMonth: Map<number, number>, filledM
 
 function fillFields(data: TableDataCell[], { sumByMonth, fields, filledMonths }: FillFieldsProp) {
   for (const field of (fields._ ?? [])) {
-    data.push({ name: field[1].name, type: 'first-col', description: field[1].description });
+    data.push({
+      name: field[1].name,
+      type: 'first-col',
+      description: field[1].description,
+      fieldId: field[0],
+    });
 
     const map = new Map<number, TableDataCell>();
     for (const monthlyData of (field[1].data ?? [])) {
@@ -91,7 +96,12 @@ function fillFields(data: TableDataCell[], { sumByMonth, fields, filledMonths }:
 
 function fillCounters(data: TableDataCell[], { counters, filledMonths } : FillCountersProp) {
   for (const counter of (counters._ ?? [])) {
-    data.push({ name: counter[1].name, type: 'first-col', description: counter[1].description });
+    data.push({
+      name: counter[1].name,
+      type: 'first-col',
+      description: counter[1].description,
+      counterId: counter[0],
+    });
 
     const map = new Map<number, TableDataCell>();
     for (const monthlyData of (counter[1].data ?? [])) {
