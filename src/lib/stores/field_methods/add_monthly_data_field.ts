@@ -5,14 +5,14 @@ import { updateFilledMonths } from "../housing";
 import { _checkOwner, _getHousingById } from "../utils";
 
 type MonthlyFieldArrayElement = ArrayElement<FieldDocType['data']>;
-export type MonthProp = NonNullable<MonthlyFieldArrayElement['month']>;
+export type MonthPropField = NonNullable<MonthlyFieldArrayElement['month']>;
 export type MonthlyDataField = {
   amount?: MonthlyFieldArrayElement['amount'];
   price?: MonthlyFieldArrayElement['price'];
   fieldId: string;
 };
 
-export async function _addMonthlyDataField(month: MonthProp, data: MonthlyDataField[]) {
+export async function _addMonthlyDataField(month: MonthPropField, data: MonthlyDataField[]) {
   if (!month) throw new RentError('MONTH_REQUIRED');
   if (!data.length) throw new RentError('DATA_REQUIRED');
 

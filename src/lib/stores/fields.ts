@@ -7,7 +7,7 @@ import {
   _createField,
   _getFieldsByIds,
   type MonthlyDataField,
-  type MonthProp,
+  type MonthPropField,
   type NewField } from "./field_methods";
 import { db } from "$lib/db";
 import { clearData } from "./utils";
@@ -69,7 +69,7 @@ onSet(currentHousing, async ({ newValue }) => {
   }
 });
 
-export async function addMonthlyDataField(month: MonthProp, data: MonthlyDataField[]) {
+export async function addMonthlyDataField(month: MonthPropField, data: MonthlyDataField[]) {
   try {
     const result = await _addMonthlyDataField(month, data);
     if (result) {

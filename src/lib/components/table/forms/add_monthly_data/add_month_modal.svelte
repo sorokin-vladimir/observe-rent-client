@@ -7,7 +7,7 @@
 	import FieldBlock from "./field_block.svelte";
   import CounterBlock from "./counter_block.svelte";
 	import { generateDataObject } from "./utils";
-	import { addMonthlyDataCounter } from "$lib/stores/counter_methods";
+	import { addMonthlyDataCounter } from "$lib/stores";
 
   export let show: boolean;
   let date = new Date();

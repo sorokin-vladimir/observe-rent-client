@@ -5,12 +5,13 @@ import { updateFilledMonths } from "../housing";
 import { _checkOwner, _getHousingById } from "../utils";
 
 type MonthlyCounterArrayElement = ArrayElement<CounterDocType['data']>;
-type MonthlyData = {
+export type MonthPropCounter = NonNullable<MonthlyCounterArrayElement['month']>;
+export type MonthlyDataCounter = {
   value?: MonthlyCounterArrayElement['value'];
   counterId: string;
 };
 
-export async function addMonthlyDataCounter(month: MonthlyCounterArrayElement['month'], data: MonthlyData[]) {
+export async function _addMonthlyDataCounter(month: MonthPropCounter, data: MonthlyDataCounter[]) {
   if (!month) throw new RentError('MONTH_REQUIRED');
   if (!data.length) throw new RentError('DATA_REQUIRED');
 

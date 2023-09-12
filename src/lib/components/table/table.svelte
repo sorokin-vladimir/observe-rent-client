@@ -6,7 +6,7 @@
 	import { createField } from "$lib/stores";
 	import { counters, currentHousing, currentHousingId, fields, tableData } from "$lib/stores";
   import { Cell } from './cell';
-	import { createCounter } from "$lib/stores/counter_methods";
+	import { createCounter } from "$lib/stores";
 	import { onMount } from "svelte";
 
   let showAddFieldPopover = false;

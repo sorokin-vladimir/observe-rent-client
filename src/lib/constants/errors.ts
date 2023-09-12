@@ -8,6 +8,7 @@ export const errorsMap = {
   DOCUMENT_NOT_FOUND: 'Document is not found',
   HOUSING_NOT_FOUND: 'Housing is not found',
   HOUSINGID_INVALID_FORMAT: 'HousingID has invalid format',
+  HOUSINGID_REQUIRED: 'Housing ID is required',
 
   /** System */
   DB_NOT_DEFINED: 'DB is not defined',
@@ -29,5 +30,7 @@ export const errorsMap = {
 
   /** Add field */
   FIELD_NAME_REQUIRED: 'Field name is required',
-  HOUSINGID_REQUIRED: 'Housing ID is required',
+
+  /** Add counter */
+  COUNTER_NAME_REQUIRED: 'Counter name is required',
 }

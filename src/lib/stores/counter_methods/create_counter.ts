@@ -1,27 +1,27 @@
 import type { CounterDocType } from "$lib/types";
-import { getUTCTimestamp, getUid, isValidId, sanitizeFlatObj } from "$lib/utils";
+import { RentError, getUTCTimestamp, getUid, isValidId, sanitizeFlatObj } from "$lib/utils";
 import { db } from "$lib/db";
 import { _getHousingById, _getUserId } from "../utils";
 
 
-type NewCounter = Partial<Omit<
+export type NewCounter = Partial<Omit<
   CounterDocType, 'name' | 'housingId' | 'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'ordering'
 >> & Pick<CounterDocType, 'name' | 'housingId'>;
 
-export async function createCounter(counter: NewCounter) {
+export async function _createCounter(counter: NewCounter) {
   const userId = _getUserId();
 
   const id = await getUid();
   const currentTime = getUTCTimestamp();
 
-  if (!isValidId(counter.housingId)) throw new Error("Invalid format: housingId");
+  if (!isValidId(counter.housingId)) throw new RentError('HOUSINGID_INVALID_FORMAT')
   const housingDoc = await _getHousingById(counter.housingId)?.exec();
-  if (!housingDoc) throw new Error("Housing not found");
+  if (!housingDoc) throw new RentError('HOUSING_NOT_FOUND');
   const countersCount = housingDoc.counters?.length ?? 0;
 
   const sanitizedNewCounter: Partial<CounterDocType> = sanitizeFlatObj(counter);
-  if (!sanitizedNewCounter.name) throw new Error('Counter name is required');
-  if (!sanitizedNewCounter.housingId) throw new Error('Counter housingId is required');
+  if (!sanitizedNewCounter.name) throw new RentError('COUNTER_NAME_REQUIRED')
+  if (!sanitizedNewCounter.housingId) throw new RentError('HOUSINGID_REQUIRED');
 
   const newCounter: CounterDocType = {
     ...sanitizedNewCounter,

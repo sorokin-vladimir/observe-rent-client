@@ -4,7 +4,15 @@ import { action, deepMap, onSet } from "nanostores";
 import { db } from "$lib/db";
 import { clearData } from "./utils";
 import { currentHousing } from "./housing";
-import { _getCountersByIds } from "./counter_methods";
+import {
+  _addMonthlyDataCounter,
+  _createCounter,
+  _getCountersByIds,
+  type MonthlyDataCounter,
+  type MonthPropCounter,
+  type NewCounter} from "./counter_methods";
+import { ui } from "./ui";
+import { RentError, timestampToReadableDate } from "$lib/utils";
 
 export const counters = deepMap<CountersStore>({_: null});
 
@@ -60,3 +68,39 @@ onSet(currentHousing, async ({ newValue }) => {
     sub?.unsubscribe();
   }
 });
+
+export async function addMonthlyDataCounter(month: MonthPropCounter, data: MonthlyDataCounter[]) {
+  try {
+    const result = await _addMonthlyDataCounter(month, data);
+    if (result) {
+      ui.get().pushNotification({
+        text: `Counters' data for ${timestampToReadableDate(month, 'long')} was successfully added`,
+      });
+    }
+    return result;
+  } catch (error) {
+    ui.get().pushNotification({
+      text: error as RentError,
+      type: 'error',
+    });
+    console.error(error);
+  }
+}
+
+export async function createCounter(counter: NewCounter) {
+  try {
+    const result = await _createCounter(counter);
+    if (result.id) {
+      ui.get().pushNotification({
+        text: `Counter "${result.name}" was successfully added`,
+      });
+    }
+    return result;
+  } catch (error) {
+    ui.get().pushNotification({
+      text: error as RentError,
+      type: 'error',
+    });
+    console.error(error);
+  }
+}

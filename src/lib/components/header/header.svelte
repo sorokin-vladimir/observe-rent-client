@@ -17,6 +17,7 @@
     position: sticky;
     top: 0;
     background-color: var(--y-body-bg);
+    z-index: 1;
 
     &::after {
       content: '';
