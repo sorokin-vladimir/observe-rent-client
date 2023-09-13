@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
-	import { Button, DatePicker, Input, Label, Modal, ModalBody, ModalFooter } from "yesvelte";
+  import { createEventDispatcher } from "svelte";
+	import { Button, DatePicker, Label, Modal, ModalBody, ModalFooter } from "yesvelte";
   import { fields, counters } from "$lib/stores";
 	import { addMonthlyDataField } from "$lib/stores";
 	import { getTimestampForMonthlyData } from "$lib/utils";
@@ -121,8 +121,5 @@
     align-items: center;
     max-width: 24rem;
     margin: 0 auto;
-  }
-  .field-name {
-    margin: 1rem 0 0 0;
   }
 </style>

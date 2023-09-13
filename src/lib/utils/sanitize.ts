@@ -1,7 +1,7 @@
 import DOMPurify from "dompurify";
 
-export function sanitize(str: string) {
-  return DOMPurify.sanitize(str).trim();
+function sanitize(str: string) {
+  return DOMPurify.sanitize?.(str).trim() ?? str;
 }
 
 export function sanitizeFlatObj(obj: Record<string, unknown>) {
